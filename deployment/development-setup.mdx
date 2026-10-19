@@ -1,0 +1,36 @@
+---
+title: "Documentation Development Setup"
+description: "Local preview, validation, Git workflow, and deployment."
+---
+
+# Documentation development setup
+
+## Prerequisites
+
+- Node.js 20.17.0+ (supported LTS recommended)
+- Git
+- `npm install -g mint@latest`
+
+## Local preview
+
+```powershell
+cd "D:\CTLup\Unity_Projects\Documentation\BIO-INTEL-MOB-Docs"
+mint dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Validation
+
+```powershell
+mint validate
+mint openapi-check openapi/wordpress.yaml
+```
+
+## Publishing
+
+Connect the documentation repository through Mintlify's Git settings, confirm the intended deployment branch, then push a reviewed commit. Check the exact live URL in the Mintlify dashboard.
+
+## When moving to CTLup
+
+Transfer the repository (if allowed) or push it into a fresh `ctlup` repository. Then update the Mintlify Git connection and GitHub App installation permissions. Keep preview URLs distinct from production documentation domains.

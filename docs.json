@@ -1,0 +1,76 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "BIO-INTEL-MOB",
+  "colors": {
+    "primary": "#16855D"
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "index",
+              "getting-started/introduction"
+            ]
+          },
+          {
+            "group": "Architecture & Platforms",
+            "pages": [
+              "architecture/system-overview",
+              "unity-vr/overview",
+              "geospatial/cesium"
+            ]
+          },
+          {
+            "group": "Urban Inspection",
+            "pages": [
+              "inspection/street-inspection"
+            ]
+          },
+          {
+            "group": "Traffic Simulation",
+            "pages": [
+              "simulation/sumo"
+            ]
+          },
+          {
+            "group": "Backend",
+            "pages": [
+              "backend/wordpress"
+            ]
+          },
+          {
+            "group": "Development",
+            "pages": [
+              "deployment/development-setup"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "openapi": "openapi/wordpress.yaml",
+        "pages": [
+          "api-reference/overview",
+          "GET /api/datasets"
+        ]
+      }
+    ]
+  },
+  "api": {
+    "playground": {
+      "display": "simple"
+    },
+    "examples": {
+      "languages": [
+        "curl",
+        "javascript"
+      ],
+      "defaults": "required"
+    }
+  }
+}

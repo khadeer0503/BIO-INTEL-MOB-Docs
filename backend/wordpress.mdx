@@ -1,0 +1,30 @@
+---
+title: "WordPress Backend"
+description: "Pilot-specific REST services and persistence responsibilities."
+---
+
+# WordPress backend
+
+The BIO-INTEL-MOB backend is **WordPress REST API**. Spring Boot is no longer in use. Each pilot site has its own WordPress instance and database.
+
+## Known test endpoint
+
+The Rome site exposes a dataset route reported by the project team:
+
+```http
+GET https://rome.bio-intel-mob.eu/wp-json/api/datasets
+```
+
+This page does not imply a verified response structure. Read the registered WordPress REST routes and sample responses before adding schema documentation.
+
+## Recommended API conventions
+
+- Keep cross-city route semantics and schema versions consistent where possible.
+- Validate input and enforce capability-based authentication for write routes.
+- Avoid placing secrets and sensitive proposal data in publicly readable OpenAPI examples.
+- Consider explicit CRUD endpoints and concurrency/version protection for future placement persistence.
+- Keep production, staging and local server URLs distinguishable.
+
+## API schema checklist
+
+Confirm request method, path, permissions, query parameters, response status codes, pagination, timestamp formats, and images/media fields for each route.

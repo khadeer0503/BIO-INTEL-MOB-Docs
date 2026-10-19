@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: BIO-INTEL-MOB WordPress REST API
+  version: 0.1.0-draft
+  description: >
+    Initial documentation contract. Response structure, authentication, and
+    optional request parameters must be verified against the WordPress plugin.
+servers:
+  - url: https://rome.bio-intel-mob.eu/wp-json
+    description: Rome pilot site (user-provided endpoint; not verified here)
+tags:
+  - name: Datasets
+    description: Dataset retrieval operations
+paths:
+  /api/datasets:
+    get:
+      tags:
+        - Datasets
+      operationId: listDatasets
+      summary: Retrieve datasets
+      description: >
+        Retrieves datasets from the Rome pilot WordPress REST API.
+        The exact JSON response schema is pending verification.
+      responses:
+        '200':
+          description: Successful response; JSON shape not yet verified
+          content:
+            application/json:
+              schema: {}

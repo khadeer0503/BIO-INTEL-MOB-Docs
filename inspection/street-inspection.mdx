@@ -1,0 +1,42 @@
+---
+title: "Street Inspection Workspace"
+description: "Workspace bounds, placement controls, and edit state."
+---
+
+# Street inspection workspace
+
+A street-inspection session creates a local context around a selected proposal. The workspace separates reference geometry, placement/collision surfaces, editable objects, and session-specific UI/state.
+
+## Conceptual hierarchy
+
+```text
+StreetWorkspace
+├── Reference
+├── GIS
+│   ├── Roads
+│   ├── Sidewalks
+│   └── Terrain
+├── Interaction
+│   ├── PlacementSurfaces
+│   ├── Colliders
+│   └── SnapPoints
+├── EditableObjects
+└── Runtime
+```
+
+Verify hierarchy names and grouping against the current prefab before treating this as the canonical scene structure.
+
+## Editing lifecycle
+
+- **Idle:** no active placement or edit.
+- **Previewing:** chosen inventory object follows the target surface/ray.
+- **Moving/editing:** an existing object is selected and repositioned.
+- **Confirm/cancel:** input transitions the placement state without leaving ghost previews.
+
+## Persistence is separate
+
+Local object placement in Unity does **not** automatically write to the WordPress database. Object persistence will require a versioned payload, geometry/geolocation fields, validation, authorization and an idempotent save/update flow.
+
+## Collision considerations
+
+Use physics layers and colliders on the intended local surfaces/objects. Verify walking bounds, teleport rays, camera/head collision assumptions and performance in a real headset.

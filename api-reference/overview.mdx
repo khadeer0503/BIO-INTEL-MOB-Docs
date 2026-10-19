@@ -1,0 +1,24 @@
+---
+title: "WordPress API Reference"
+description: "OpenAPI reference and guidance for the multi-site WordPress data services."
+---
+
+# WordPress API reference
+
+This section is generated from `openapi/wordpress.yaml`. It starts with the user-provided Rome dataset endpoint and will expand only after the WordPress plugin routes and payloads have been inspected.
+
+## Pilot sites
+
+The project uses separate WordPress deployments per city. Add a `servers` entry **only after verifying** each host exposes the same route and schema. When a site differs materially, use a separate OpenAPI file or clearly versioned contract.
+
+## API playground
+
+The Mintlify playground is intentionally configured to **simple** mode in this test repository. This displays request documentation without allowing users to execute requests from the page. Enable interactive requests against an approved staging API first.
+
+## Contract workflow
+
+1. Inspect the route registration in the WordPress plugin.
+2. Capture a sanitized, representative response from staging.
+3. Add explicit schemas, parameters, errors and authorization details to OpenAPI.
+4. Validate with `mint openapi-check openapi/wordpress.yaml`.
+5. Review and merge the documentation change.

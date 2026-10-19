@@ -1,0 +1,28 @@
+---
+title: "Unity VR Overview"
+description: "Immersive navigation and proposal interactions."
+---
+
+# Unity VR overview
+
+The VR frontend uses **Unity 6**, **OpenXR** and **XR Interaction Toolkit**, with the geospatial world positioned through Cesium.
+
+## Application modes
+
+| Mode | Intended experience |
+| --- | --- |
+| Overview | Drone-like navigation and high-level city exploration |
+| Proposal inspection | Read a geolocated report and its metadata |
+| Street inspection | Explore a local workspace and evaluate interventions |
+
+## Proposal flow
+
+1. Select the active pilot site.
+2. Fetch dataset/proposal data through the configured WordPress instance.
+3. Position markers using geographic coordinates and Cesium grounding.
+4. Open proposal metadata UI using XR interaction.
+5. Start a street inspection or simulation action when available.
+
+## Implementation verification
+
+Before documenting exact inputs or script methods, verify the source-controlled versions and Inspector wiring for `SiteManager`, proposal API manager/spawner, `LandingController`, `InspectionManager`, and XRI Input Actions.

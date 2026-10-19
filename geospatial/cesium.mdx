@@ -1,0 +1,23 @@
+---
+title: "Cesium & Geospatial Layer"
+description: "3D Tiles streaming, geographic coordinates, and grounding."
+---
+
+# Geospatial integration
+
+The Unity application uses **Cesium for Unity** to stream geographically positioned city content, including Google Photorealistic 3D Tiles accessed through Cesium ion where configured.
+
+## Coordinate handling
+
+- Treat latitude, longitude, and ellipsoidal height as geographical inputs, not raw Unity world positions.
+- Convert to world-local coordinates through the active `CesiumGeoreference`.
+- Recalculate/ground proposal markers after terrain or tiles become available.
+- Treat georeference changes during city switching as a spatial lifecycle event.
+
+## Rendering and physics
+
+3D Tiles visualization and collision-ready object geometry are **different concerns**. A visual building/road surface may not provide suitable collision geometry or a stable placement mesh. Street inspection should use curated colliders and a deliberately bounded reference surface where appropriate.
+
+## Compliance check
+
+Before embedding Street View imagery, caching derived content, or exporting tiles/assets, verify licensing, attribution, and usage restrictions for the actual Google/Cesium contracts.
