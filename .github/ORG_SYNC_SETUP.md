@@ -4,6 +4,11 @@ Pushes to `main` in `khadeer0503/BIO-INTEL-MOB-Docs` trigger a one-way push of
 `main` and its Git history to `https://github.com/ctlup/BIO-INTEL-MOB-Docs.git`.
 The copied workflow skips execution in the organization repository.
 
+The personal repository is the source of truth. Synchronization replaces
+destination-only commits on `ctlup/main` using `--force-with-lease`, matching the
+Unity repository's one-way synchronization policy. Preserve any wanted
+destination-only changes in the personal repository before enabling this sync.
+
 ## Setup
 
 1. Commit `.github/workflows/sync-to-organization.yml` and push it to the personal
@@ -18,7 +23,8 @@ The copied workflow skips execution in the organization repository.
    `ctlup`, this destination repository, and **Contents: Read and write** plus
    **Workflows: Read and write**. Complete organization approval if required.
 4. Ensure Actions is enabled in the source repository and destination branch
-   rules permit the token owner to push `main`.
+   rules permit the token owner to push `main`, including force updates when
+   the histories diverge.
 5. Open **Actions > Sync documentation to organization** to inspect the push run
    or use **Run workflow** on `main` to retry. A successful sync leaves both
    repositories' `main` branches at the same commit SHA.
@@ -30,10 +36,15 @@ The copied workflow skips execution in the organization repository.
 - Missing token: add `ORG_SYNC_TOKEN` to the personal documentation repository.
 - Permission denied or repository not found: verify destination access, token
   permissions, organization approval, and branch rules.
-- Non-fast-forward rejection: the destination has commits absent from the source.
-  This workflow uses a regular push; reconcile the histories before retrying.
-  Unlike the Unity workflow, it does not replace destination-only commits with a
-  force push.
+- Destination-only commits: the workflow reads the destination's current `main`
+  SHA and uses it as an explicit force-with-lease expectation. It can replace
+  divergent history without a preliminary pull or merge.
+- Stale lease rejection: destination `main` changed after the workflow read it.
+  Review the intervening changes before starting a new run, which will read a
+  fresh SHA. The rejected push does not overwrite the concurrent update.
+- Destination lookup errors: the workflow stops instead of attempting a push.
+- Protected branch rejection: the destination's rules may forbid force updates.
+  Resolve this according to organization policy before retrying.
 
 Synchronization copies Git history, not repository settings, secrets, or issues.
 Verify a real Actions run before treating synchronization as operational.

@@ -50,6 +50,16 @@ jobs:
 
           git remote add organization "$DESTINATION"
 
+          # Personal main is the source of truth, including when the destination
+          # has its own history. Abort on lookup/authentication errors.
+          destination_ref=$(git \
+            -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" \
+            ls-remote --heads organization refs/heads/main)
+          destination_sha=$(printf '%s' "$destination_ref" | cut -f1)
+
+          # An empty SHA requires main to be absent. An existing SHA requires
+          # main to still match what we observed, protecting concurrent pushes.
           git \
             -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" \
-            push organization refs/heads/main:refs/heads/main
+            push "--force-with-lease=refs/heads/main:$destination_sha" \
+            organization refs/heads/main:refs/heads/main
