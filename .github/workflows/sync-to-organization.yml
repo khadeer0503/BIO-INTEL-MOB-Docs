@@ -1,0 +1,55 @@
+name: Sync documentation to organization
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-documentation
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.repository == 'khadeer0503/BIO-INTEL-MOB-Docs'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      DESTINATION: https://github.com/ctlup/BIO-INTEL-MOB-Docs.git
+      GIT_TERMINAL_PROMPT: '0'
+
+    steps:
+      - name: Check synchronization token
+        env:
+          SYNC_TOKEN: ${{ secrets.ORG_SYNC_TOKEN }}
+        run: |
+          if [ -z "$SYNC_TOKEN" ]; then
+            echo "::error::Add the ORG_SYNC_TOKEN Actions secret in khadeer0503/BIO-INTEL-MOB-Docs. See .github/ORG_SYNC_SETUP.md."
+            exit 1
+          fi
+
+      - name: Checkout documentation
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683af # v4.2.2
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Push documentation to ctlup
+        env:
+          SYNC_TOKEN: ${{ secrets.ORG_SYNC_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          auth=$(printf 'x-access-token:%s' "$SYNC_TOKEN" | base64 -w0)
+          echo "::add-mask::$auth"
+
+          git remote add organization "$DESTINATION"
+
+          git \
+            -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" \
+            push organization refs/heads/main:refs/heads/main
