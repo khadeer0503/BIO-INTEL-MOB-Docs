@@ -1,36 +1,55 @@
 ---
 title: "BIO-INTEL-MOB Documentation"
-description: "Technical documentation and API reference for the Smart Urbanity VR crowdsourcing platform."
+description: "Technical documentation, theoretical foundations, and API reference for the Smart Urbanity VR crowdsourcing platform."
 ---
 
-# BIO-INTEL-MOB
+# BIO-INTEL-MOB Documentation Portal
 
-Welcome to the documentation portal for the **Smart Urbanity VR** crowdsourcing platform.
+Welcome to the technical documentation and architectural reference for the **BIO-INTEL-MOB Virtual Reality Platform**—an immersive digital twin and civic crowdsourcing environment for participatory urban mobility planning.
 
-The platform combines immersive city exploration, geolocated citizen proposals, street-level inspection workflows, object placement, and traffic/pedestrian simulation. The runtime stack includes Unity, OpenXR, Cesium, WordPress REST APIs, and SUMO.
+The platform combines city-scale geospatial visualization, geolocated citizen proposals, street-level inspection workspaces, ergonomic asset co-design, and microscopic traffic/pedestrian simulation into a unified runtime stack.
 
-## Explore the platform
+```mermaid
+flowchart LR
+    A[Civic Proposals & Data] --> B[Aerial Overview Exploration]
+    B --> C[Marker Discovery & Filtering]
+    C --> D[Smooth Hermite Landing]
+    D --> E[Street Workspace Inspection]
+    E --> F[Asset Placement & Editing]
+    E --> G[SUMO Traffic Micro-Simulation]
+    F --> H[Urban Intervention Evaluation]
+    G --> H
+```
+
+---
+
+## Explore the Documentation
 
 <CardGroup cols={2}>
-  <Card title="Architecture" icon="network" href="/architecture/system-overview">
-    System boundaries, components, and data flow.
+  <Card title="System Architecture" icon="network-wired" href="/architecture/system-overview">
+    Single-scene runtime topology, subsystem boundaries, service managers, and sequence diagrams.
   </Card>
-  <Card title="Unity VR" icon="glasses" href="/unity-vr/overview">
-    Overview mode, interactions, city selection, and proposal markers.
+  <Card title="Unity VR & Ergonomics" icon="vr-cardboard" href="/unity-vr/overview">
+    OpenXR integration, sensory conflict theory, dynamic tunneling vignette, and procedural radial UI.
   </Card>
-  <Card title="Street Inspection" icon="map-pin" href="/inspection/street-inspection">
-    Workspaces, placement surfaces, and object editing.
+  <Card title="Geospatial & 3D Tiles" icon="earth-americas" href="/geospatial/cesium">
+    WGS84 ellipsoidal transformations, CesiumGeoreference double-precision rebasing, SSE metrics, and physics decoupling.
   </Card>
-  <Card title="WordPress API" icon="code" href="/api-reference/overview">
-    Pilot-site data access and the OpenAPI reference.
+  <Card title="Street Inspection Workspace" icon="map-pin" href="/inspection/street-inspection">
+    Hermite landing kinematics, workspace hierarchy, metric grids, and asset placement lifecycle.
+  </Card>
+  <Card title="SUMO Traffic Simulation" icon="traffic-light" href="/simulation/sumo">
+    Multithreaded UDP socket streaming, coordinate conversion formulas, and zero-allocation object pooling.
+  </Card>
+  <Card title="WordPress Backend & REST API" icon="server" href="/backend/wordpress">
+    Pilot-specific REST architecture, proposal taxonomy, marker lifecycle, and intervention persistence.
   </Card>
 </CardGroup>
 
-## Documentation status
+---
 
-This is the **initial documentation scaffold**. Architectural descriptions provide a starting point, but exact API payloads, Unity component names/versions, SUMO process deployment, and operation status must be checked against the current source code and pilot environments before publication as production specifications.
+## Repositories & Resources
 
-## Repositories
-
-- [Unity VR application (personal repository)](https://github.com/khadeer0503/CrowdSourcing_Virtual-Reality)
-- [Documentation test repository](https://github.com/khadeer0503/BIO-INTEL-MOB-Docs)
+- **Unity VR Application**: [khadeer0503/CrowdSourcing_Virtual-Reality](https://github.com/khadeer0503/CrowdSourcing_Virtual-Reality)
+- **Documentation Repository**: [khadeer0503/BIO-INTEL-MOB-Docs](https://github.com/khadeer0503/BIO-INTEL-MOB-Docs)
+- **Interactive OpenAPI Explorer**: [API Reference](/api-reference/overview)

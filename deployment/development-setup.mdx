@@ -1,36 +1,79 @@
 ---
-title: "Documentation Development Setup"
-description: "Local preview, validation, Git workflow, and deployment."
+title: "Development & Environment Setup"
+description: "Unity 6 LTS, OpenXR, Cesium ion tokens, SUMO configuration, and Mintlify local preview."
 ---
 
-# Documentation development setup
+# Development & Environment Setup
 
-## Prerequisites
+This guide details the setup procedures for both the **Unity VR client development environment** and the **Mintlify documentation portal**.
 
-- Node.js 20.17.0+ (supported LTS recommended)
+---
+
+## Unity VR Development Environment
+
+### Prerequisites & Versions
+- **Game Engine**: Unity 6 LTS (Version `6000.0.x` or later recommended) with Universal Render Pipeline (URP).
+- **XR Runtime**: OpenXR Plugin (`com.unity.xr.openxr`) and XR Interaction Toolkit (`com.unity.xr.interaction.toolkit` v3.x+).
+- **Geospatial Engine**: Cesium for Unity (v1.12+).
+- **Traffic Simulator**: Eclipse SUMO (v1.18.0+) with Python 3.10+ and TraCI bindings.
+- **Target Hardware**: Meta Quest 2 / 3 / Pro (via Oculus Link / AirLink), HTC Vive Focus 3, or PC VR-tethered HMDs.
+
+### Setup Instructions
+
+1. **Clone the Repository**:
+   ```powershell
+   git clone https://github.com/khadeer0503/CrowdSourcing_Virtual-Reality.git
+   ```
+2. **Configure Cesium ion Token**:
+   - Navigate to **Cesium** > **Cesium ion** in the Unity Editor menu bar.
+   - Connect your Cesium ion account or specify a project-level access token with permissions for *Google Photorealistic 3D Tiles*.
+3. **Configure SUMO Path**:
+   - Ensure SUMO is installed on the host workstation.
+   - Set the system environment variable `SUMO_HOME`:
+     ```powershell
+     [System.Environment]::SetEnvironmentVariable('SUMO_HOME', 'C:\Program Files (x86)\Eclipse\Sumo', 'User')
+     ```
+   - Verify that the `sumo` and `sumo-gui` binaries are accessible in your system `PATH`.
+4. **OpenXR Controller Bindings**:
+   - In Unity Editor, go to **Project Settings** > **XR Plug-in Management** > **OpenXR**.
+   - Verify that interaction profiles are enabled for your target controllers (e.g., *Oculus Touch Controller Profile*, *HTC Vive Controller Profile*).
+
+---
+
+## Mintlify Documentation Setup
+
+The documentation site is built using **Mintlify** and can be run locally for rapid live-reload authoring.
+
+### Prerequisites
+- Node.js 20.17.0+ (LTS recommended)
 - Git
-- `npm install -g mint@latest`
+- Global Mintlify CLI:
+  ```powershell
+  npm install -g mint@latest
+  ```
 
-## Local preview
+### Local Preview & Validation
 
 ```powershell
+# Navigate to documentation directory
 cd "D:\CTLup\Unity_Projects\Documentation\BIO-INTEL-MOB-Docs"
+
+# Start local hot-reloading development server
 mint dev
-```
 
-Open [http://localhost:3000](http://localhost:3000).
-
-## Validation
-
-```powershell
+# Validate documentation links and frontmatter
 mint validate
+
+# Validate the OpenAPI WordPress contract
 mint openapi-check openapi/wordpress.yaml
 ```
 
-## Publishing
+Once running, preview the portal at [http://localhost:3000](http://localhost:3000).
 
-Connect the documentation repository through Mintlify's Git settings, confirm the intended deployment branch, then push a reviewed commit. Check the exact live URL in the Mintlify dashboard.
+---
 
-## When moving to CTLup
+## Publishing & Deployment Workflow
 
-Transfer the repository (if allowed) or push it into a fresh `ctlup` repository. Then update the Mintlify Git connection and GitHub App installation permissions. Keep preview URLs distinct from production documentation domains.
+1. **Branch Strategy**: Commit updates to feature branches or `main`.
+2. **Continuous Deployment**: Connect the repository to the Mintlify dashboard. Pushes to `main` trigger automated build, linting, and global edge CDN deployment.
+3. **API Contract Verification**: Always run `mint openapi-check openapi/wordpress.yaml` before committing updates to REST specifications.

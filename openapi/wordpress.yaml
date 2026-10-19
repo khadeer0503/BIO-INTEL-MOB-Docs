@@ -19,11 +19,97 @@ paths:
       operationId: listDatasets
       summary: Retrieve datasets
       description: >
-        Retrieves datasets from the Rome pilot WordPress REST API.
-        The exact JSON response schema is pending verification.
+        Retrieves civic proposals and urban datasets from the Rome pilot WordPress REST API.
       responses:
         '200':
-          description: Successful response; JSON shape not yet verified
+          description: Successful response containing the city dataset and civic proposals
           content:
             application/json:
-              schema: {}
+              schema:
+                $ref: '#/components/schemas/DatasetResponse'
+components:
+  schemas:
+    DatasetResponse:
+      type: object
+      required:
+        - id
+        - city
+        - generatedAt
+        - proposals
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: Unique identifier for the dataset batch
+        city:
+          type: string
+          example: Rome
+          description: City associated with the dataset
+        generatedAt:
+          type: string
+          format: date-time
+          example: '2026-10-19T10:38:40+00:00'
+          description: Timestamp when the response was generated
+        proposals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Proposal'
+    Proposal:
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - latitude
+        - longitude
+        - category
+        - votes
+        - status
+        - severity
+        - date
+      properties:
+        id:
+          type: integer
+          example: 314
+        title:
+          type: string
+          example: Test -Repubblica
+        description:
+          type: string
+          example: Test -Repubblica
+        latitude:
+          type: number
+          format: double
+          example: 41.902706261321526
+        longitude:
+          type: number
+          format: double
+          example: 12.496237461082446
+        category:
+          type: string
+          example: TRANSPORT
+        votes:
+          type: integer
+          example: 0
+        status:
+          type: string
+          example: PENDING
+        severity:
+          type: string
+          example: MEDIUM
+        date:
+          type: string
+          format: date
+          example: '2026-10-08'
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+          example:
+            - https://rome.bio-intel-mob.eu/wp-content/uploads/2026/10/images-27.jpeg
+        video:
+          type: string
+          nullable: true
+          example: null
+

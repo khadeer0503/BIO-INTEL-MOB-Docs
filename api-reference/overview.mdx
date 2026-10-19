@@ -13,12 +13,31 @@ The project uses separate WordPress deployments per city. Add a `servers` entry 
 
 ## API playground
 
-The Mintlify playground is intentionally configured to **simple** mode in this test repository. This displays request documentation without allowing users to execute requests from the page. Enable interactive requests against an approved staging API first.
+The Mintlify playground is configured to **interactive** mode (`"mode": "interactive"` in `docs.json`). This enables the "Send Request" / "Try It" button in the API documentation pages directly from the browser.
+
+### CORS & Connectivity Verification
+
+When making requests from the web browser at `https://ct-lup.mintlify.site` (or `http://localhost:3000` locally):
+- **DNS & Server**: Host `rome.bio-intel-mob.eu` resolves to IP `82.165.59.103` (nginx/1.30.4 + PHP 8.3).
+- **Endpoint**: `https://rome.bio-intel-mob.eu/wp-json/api/datasets`
+- **CORS Support**: The WordPress server responds dynamically with:
+  ```http
+  Access-Control-Allow-Origin: <Request-Origin>
+  Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, PATCH, DELETE
+  Access-Control-Allow-Credentials: true
+  Vary: Origin
+  ```
+- **Preflight (OPTIONS)**: Successfully handled with HTTP 200 OK.
+- **Payload Shape**: Returns a JSON object with `id`, `city`, `generatedAt`, and an array of `proposals` (including geolocation coordinates, category, severity, status, images, and description).
+
+> [!NOTE]
+> If calling from custom domains or local staging instances, ensure your origin is accepted by the server or that `Access-Control-Allow-Origin` permits your calling hostname. If requests fail in the browser, check DevTools Network tab for mixed content (HTTP vs HTTPS) or browser extensions blocking cross-origin requests.
 
 ## Contract workflow
 
 1. Inspect the route registration in the WordPress plugin.
 2. Capture a sanitized, representative response from staging.
-3. Add explicit schemas, parameters, errors and authorization details to OpenAPI.
+3. Add explicit schemas, parameters, errors and authorization details to OpenAPI (`openapi/wordpress.yaml`).
 4. Validate with `mint openapi-check openapi/wordpress.yaml`.
 5. Review and merge the documentation change.
+

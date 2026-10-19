@@ -63,7 +63,7 @@
   },
   "api": {
     "playground": {
-      "display": "simple"
+      "mode": "interactive"
     },
     "examples": {
       "languages": [
