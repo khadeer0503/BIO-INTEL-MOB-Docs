@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # BIO-INTEL-MOB Documentation
 
 Central documentation source for BIO-INTEL-MOB / Smart Urbanity VR. Hosted with Mintlify.
@@ -43,3 +44,7 @@ Keep internal credentials, cookies, API keys, service endpoints not intended for
 ## Repository migration
 
 The testing repository is `khadeer0503/BIO-INTEL-MOB-Docs`. Later, transfer it to `ctlup` using GitHub's repository transfer workflow (subject to organization permissions) or push a complete clone to a new organization repo. Update Mintlify's connected repository setting and GitHub App access after moving.
+=======
+# BIO-INTEL-MOB-Docs
+VR Documentation - Mintlify
+>>>>>>> origin/main
