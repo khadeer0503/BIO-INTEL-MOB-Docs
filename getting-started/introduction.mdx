@@ -5,61 +5,55 @@ description: "Core objectives, crowdsourcing paradigm, multi-scale spatial explo
 
 # Introduction
 
-The **BIO-INTEL-MOB Virtual Reality Platform** is an immersive digital twin and civic crowdsourcing environment designed to evaluate urban mobility challenges, facilitate participatory planning, and simulate spatial interventions. 
+The BIO-INTEL-MOB Virtual Reality Platform is an immersive digital twin and civic crowdsourcing environment for evaluating urban mobility challenges, planning with citizens, and simulating spatial interventions.
 
-By integrating georeferenced city-scale 3D tiles with microscopic traffic modeling and street-level spatial editing, the platform bridges the gap between passive citizen consultation and active, evidence-based urban co-design.
+Georeferenced city-scale 3D tiles provide the setting for street-level editing and microscopic traffic modeling. Citizens and planners can use these tools to test urban designs and assess their effects together.
 
 ```mermaid
 flowchart LR
-    A[Civic Proposals & Data] --> B[Aerial Overview Exploration]
-    B --> C[Marker Discovery & Filtering]
-    C --> D[Smooth Hermite Landing]
-    D --> E[Street Workspace Inspection]
-    E --> F[Asset Placement & Editing]
-    E --> G[SUMO Traffic Micro-Simulation]
-    F --> H[Urban Intervention Evaluation]
+    A["Civic Proposals & Data"] --> B["Aerial Overview Exploration"]
+    B --> C["Marker Discovery & Filtering"]
+    C --> D["Smooth Hermite Landing"]
+    D --> E["Street Workspace Inspection"]
+    E --> F["Asset Placement & Editing"]
+    E --> G["SUMO Traffic Micro-Simulation"]
+    F --> H["Urban Intervention Evaluation"]
     G --> H
 ```
 
----
+## The crowdsourcing paradigm
 
-## The Crowdsourcing Paradigm
+Two-dimensional maps, static surveys, and public meetings can make spatial impacts difficult for non-experts to assess. BIO-INTEL-MOB supports civic participation through an interactive VR environment:
 
-Traditional civic participation often relies on two-dimensional maps, static surveys, and public meetings where spatial impacts are difficult for non-experts to assess. BIO-INTEL-MOB shifts this paradigm into an **interactive virtual reality environment**:
+1. Spatial Grounding: Citizen proposals collected through municipal platforms appear at their real-world locations within photorealistic 3D city models.
+2. Dual-Scale Spatial Exploration:
+   - Macro-Scale (City Overview): A free-flying aerial drone perspective lets planners and citizens assess geographic distribution, density, and regional mobility patterns across pilot cities such as Rome and Antwerp.
+   - Micro-Scale (Street Workspace): A bounded physical environment is generated around a proposal. Users land at pedestrian eye level ($y \approx 1.7\,\text{m}$) to evaluate sidewalks, crossings, sightlines, and street geometry.
+3. Participatory Intervention Design: Users can test potential mitigations, including bike lanes, traffic calming bollards, speed humps, and green buffers, through an ergonomic world-space asset placement catalog.
+4. Dynamic Feedback Loop: Street modifications can be linked directly to microscopic traffic simulations (SUMO) for real-time visual feedback on congestion, queuing, and pedestrian accessibility.
 
-1. **Spatial Grounding**: Real-world citizen proposals collected via municipal platforms are contextualized within photorealistic 3D city models rather than abstract tabular datasets.
-2. **Dual-Scale Spatial Exploration**:
-   - **Macro-Scale (City Overview)**: A free-flying aerial drone perspective allows urban planners and citizens to evaluate geographic distribution, density, and regional mobility patterns across entire pilot cities (e.g., Rome, Antwerp).
-   - **Micro-Scale (Street Workspace)**: A bounded, localized physical environment generated around a proposal where users land at true pedestrian eye-level ($y \approx 1.7\,\text{m}$) to evaluate sidewalks, crossings, sightlines, and street geometry.
-3. **Participatory Intervention Design**: Users do not merely review existing issues; they can test potential mitigations—such as bike lanes, traffic calming bollards, speed humps, and green buffers—using an ergonomic world-space asset placement catalog.
-4. **Dynamic Feedback Loop**: Street modifications can be directly linked to microscopic traffic simulations (SUMO), providing real-time visual feedback on vehicle congestion, queuing, and pedestrian accessibility.
+## Core system goals
 
----
-
-## Core System Goals
-
-The engineering architecture of BIO-INTEL-MOB is oriented around five primary goals:
+The architecture supports the following goals:
 
 <CardGroup cols={2}>
   <Card title="Multi-Scale Immersion" icon="vr-cardboard">
-    Seamless transition from high-altitude orbital city exploration down to fine-grained pedestrian street inspections without visual disorientation or scene reload overhead.
+    Move from high-altitude city exploration to detailed pedestrian street inspection without visual disorientation or scene reload overhead.
   </Card>
   <Card title="Real-Time Geospatial Grounding" icon="earth-americas">
-    Accurate alignment of real-world WGS84 geographic coordinates with Unity Cartesian coordinates using high-precision ellipsoidal georeferencing and 3D tile streaming.
+    Align real-world WGS84 coordinates with Unity Cartesian coordinates using high-precision ellipsoidal georeferencing and 3D tile streaming.
   </Card>
   <Card title="Ergonomic VR Co-Design" icon="hand">
-    A comprehensive suite of VR-first input mechanisms: procedural annular radial menus, contextual floating HUDs, metric placement grids, and dynamic outline feedback.
+    Support VR interaction through procedural annular radial menus, contextual floating HUDs, metric placement grids, and dynamic outline feedback.
   </Card>
   <Card title="Microscopic Simulation Coupling" icon="traffic-light">
-    Asynchronous inter-process communication with SUMO via a dedicated multithreaded UDP pipeline and zero-allocation entity pooling for 90 FPS VR performance.
+    Communicate asynchronously with SUMO through a dedicated multithreaded UDP pipeline and zero-allocation entity pooling for 90 FPS VR performance.
   </Card>
 </CardGroup>
 
----
+## End-to-end user journey
 
-## End-to-End User Journey
-
-The operational workflow within the platform is structured into well-defined sequential stages:
+A session follows these stages:
 
 ```mermaid
 stateDiagram-v2
@@ -77,21 +71,22 @@ stateDiagram-v2
     ReturningTransition --> CityOverview
 ```
 
-1. **Pilot Site Selection**: The user selects an active municipal pilot (e.g., Rome). The system configures the geospatial datum and queries the pilot's WordPress REST endpoint.
-2. **Macro Exploration & Filtering**: Users fly across the city using two-hand drone controls. Proposals are rendered as color-coded vertical beacon markers. Using the procedural radial menu and filter panel, users filter markers by category (*Transport*, *Environment*, *Infrastructure*, *Accessibility*), severity (*Low*, *Medium*, *High*), and resolution status.
-3. **Hermite Landing Transition**: Selecting a proposal opens its metadata card. Triggering *Land on Street* initiates a kinematic descent powered by an S-curve Hermite interpolation curve paired with a dynamic tunneling vignette to eliminate motion sickness.
-4. **Street Workspace Activation**: The system constructs a localized `StreetWorkspace` container with a metric reference grid, dedicated physics layers, and spatial boundary clamping ($r \le R_{\text{max}}$).
-5. **Interactive Co-Design & Placement**: Users select street furniture from a data-driven catalog (`PlaceableDefinition`), previewing ghost meshes along controller rays, snapping to the metric grid, and adjusting rotation and uniform scale via the floating Workspace HUD.
-6. **Traffic Simulation Evaluation**: Users can launch a localized SUMO micro-simulation, streaming real-time vehicle and pedestrian trajectories to observe dynamic responses to the urban interventions.
-7. **Return to Aerial Overview**: Concluding the inspection gracefully dismantles the temporary workspace and eases the user camera back to aerial altitude, restoring macro-navigation.
+1. Pilot Site Selection: The user selects an active municipal pilot, such as Rome. The system configures the geospatial datum and queries that pilot's WordPress REST endpoint.
+2. Macro Exploration & Filtering: Users fly across the city with two-hand drone controls. Proposals appear as color-coded vertical beacons. The procedural radial menu and filter panel let users filter markers by category (*Transport*, *Environment*, *Infrastructure*, *Accessibility*), severity (*Low*, *Medium*, *High*), and resolution status.
+3. Hermite Landing Transition: Selecting a proposal opens its metadata card. Triggering *Land on Street* starts a kinematic descent using S-curve Hermite interpolation and a dynamic tunneling vignette for motion sickness mitigation.
+4. Street Workspace Activation: The system creates a local `StreetWorkspace` container with a metric reference grid, dedicated physics layers, and spatial boundary clamping ($r \le R_{\text{max}}$).
+5. Interactive Co-Design & Placement: Users select street furniture from a data-driven catalog (`PlaceableDefinition`). They preview ghost meshes along controller rays, snap objects to the metric grid, and adjust rotation and uniform scale through the floating Workspace HUD.
+6. Traffic Simulation Evaluation: Users can launch a local SUMO micro-simulation and stream vehicle and pedestrian trajectories in real time to observe responses to their interventions.
+7. Return to Aerial Overview: Ending the inspection removes the temporary workspace and eases the camera back to aerial altitude, restoring city navigation.
 
----
+## Documentation principles
 
-## Documentation Principles
+Development and research teams follow these documentation principles:
 
-To maintain rigorous technical integrity across all development and research teams:
+- State Verification: Architectural descriptions distinguish implemented and verified production code from prototypes and roadmap proposals.
 
-- **State Verification**: Architectural descriptions explicitly distinguish between **implemented and verified production code**, **prototypes**, and **forward-looking roadmap proposals**.
-- **Separation of Layers**: UI abstractions, geospatial coordinate engines, physics layers, and backend transport contracts are strictly isolated in documentation.
-- **Mathematical Formulations**: Key algorithms—such as coordinate projections, Hermite transition curves, Screen Space Error thresholds, and UDP byte parsing—are provided with exact mathematical formulas.
-- **VR Comfort First**: Every spatial transition and interaction mechanism is analyzed against physiological sensory conflict principles to ensure compliance with VR ergonomic standards.
+- Separation of Layers: Document UI abstractions, geospatial coordinate engines, physics layers, and backend transport contracts separately.
+
+- Mathematical Formulations: Provide exact mathematical formulas for key algorithms, including coordinate projections, Hermite transition curves, Screen Space Error thresholds, and UDP byte parsing.
+
+- VR Comfort First: Analyze each spatial transition and interaction mechanism against physiological sensory conflict principles and VR ergonomic standards.

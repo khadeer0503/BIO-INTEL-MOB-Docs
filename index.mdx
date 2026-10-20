@@ -1,29 +1,27 @@
 ---
 title: "BIO-INTEL-MOB Documentation"
-description: "Technical documentation, theoretical foundations, and API reference for the Smart Urbanity VR crowdsourcing platform."
+description: "Technical documentation, theoretical foundations, and API reference for the BIO-INTEL-MOB VR crowdsourcing platform."
 ---
 
-# BIO-INTEL-MOB Documentation Portal
+# BIO-INTEL-MOB documentation portal
 
-Welcome to the technical documentation and architectural reference for the **BIO-INTEL-MOB Virtual Reality Platform**—an immersive digital twin and civic crowdsourcing environment for participatory urban mobility planning.
+The BIO-INTEL-MOB Virtual Reality Platform is an immersive digital twin and civic crowdsourcing environment for participatory urban mobility planning.
 
-The platform combines city-scale geospatial visualization, geolocated citizen proposals, street-level inspection workspaces, ergonomic asset co-design, and microscopic traffic/pedestrian simulation into a unified runtime stack.
+Users can explore georeferenced city models, review geolocated citizen proposals, and inspect streets in local workspaces. Asset placement tools support collaborative design, and microscopic traffic and pedestrian simulations help users evaluate interventions within the same runtime.
 
 ```mermaid
 flowchart LR
-    A[Civic Proposals & Data] --> B[Aerial Overview Exploration]
-    B --> C[Marker Discovery & Filtering]
-    C --> D[Smooth Hermite Landing]
-    D --> E[Street Workspace Inspection]
-    E --> F[Asset Placement & Editing]
-    E --> G[SUMO Traffic Micro-Simulation]
-    F --> H[Urban Intervention Evaluation]
+    A["Civic Proposals & Data"] --> B["Aerial Overview Exploration"]
+    B --> C["Marker Discovery & Filtering"]
+    C --> D["Smooth Hermite Landing"]
+    D --> E["Street Workspace Inspection"]
+    E --> F["Asset Placement & Editing"]
+    E --> G["SUMO Traffic Micro-Simulation"]
+    F --> H["Urban Intervention Evaluation"]
     G --> H
 ```
 
----
-
-## Explore the Documentation
+## Explore the documentation
 
 <CardGroup cols={2}>
   <Card title="System Architecture" icon="network-wired" href="/architecture/system-overview">
@@ -46,10 +44,10 @@ flowchart LR
   </Card>
 </CardGroup>
 
----
+## Repositories & resources
 
-## Repositories & Resources
+- Unity VR Application: [ctlup/CrowdSourcing_Virtual-Reality](https://github.com/ctlup/CrowdSourcing_Virtual-Reality)
 
-- **Unity VR Application**: [ctlup/CrowdSourcing_Virtual-Reality](https://github.com/ctlup/CrowdSourcing_Virtual-Reality)
-- **Documentation Repository**: [ctlup/BIO-INTEL-MOB-Docs](https://github.com/ctlup/BIO-INTEL-MOB-Docs)
-- **Interactive OpenAPI Explorer**: [API Reference](/api-reference/overview)
+- Documentation Repository: [ctlup/BIO-INTEL-MOB-Docs](https://github.com/ctlup/BIO-INTEL-MOB-Docs)
+
+- Interactive OpenAPI Explorer: [API Reference](/api-reference/overview)

@@ -3,36 +3,34 @@ title: "WordPress Backend & Proposal Ingestion"
 description: "Pilot-specific REST architecture, civic proposal schemas, marker ingestion pipelines, and intervention persistence models."
 ---
 
-# WordPress Backend & Proposal Management
+# WordPress backend & proposal management
 
-The **BIO-INTEL-MOB Backend Subsystem** provides centralized persistence, civic proposal aggregation, and dataset delivery for each participating municipality. 
+The BIO-INTEL-MOB Backend Subsystem stores data, aggregates civic proposals, and delivers datasets for each participating municipality.
 
-The architecture uses **pilot-specific WordPress REST APIs**. The earlier monolithic Spring Boot backend has been retired in favor of lightweight, content-managed endpoints tailored to each pilot site's administrative infrastructure.
+Each pilot site has a WordPress REST API tailored to its administrative infrastructure. These lightweight, content-managed endpoints replace the retired monolithic Spring Boot backend.
 
 ```mermaid
 flowchart LR
     subgraph Municipal_Backends["Municipal Cloud Deployments"]
-        Rome["Rome Pilot WordPress\n(rome.bio-intel-mob.eu)"]
-        Antwerp["Antwerp Pilot WordPress\n(antwerp.bio-intel-mob.eu)"]
+        Rome["Rome Pilot WordPress<br/>(rome.bio-intel-mob.eu)"]
+        Antwerp["Antwerp Pilot WordPress<br/>(antwerp.bio-intel-mob.eu)"]
     end
 
     subgraph Unity_Client["Unity VR Runtime"]
-        API["APIManager Service\n(HTTP Client)"] --> Parser["JSON Deserializer\n(DatasetResponse)"]
-        Parser --> PMS["ProposalManagementService\n(Geospatial Anchoring)"]
-        PMS --> Markers["ProposalMarker Entities\n(Beacons & Colliders)"]
+        API["APIManager Service<br/>(HTTP Client)"] --> Parser["JSON Deserializer<br/>(DatasetResponse)"]
+        Parser --> PMS["ProposalManagementService<br/>(Geospatial Anchoring)"]
+        PMS --> Markers["ProposalMarker Entities<br/>(Beacons & Colliders)"]
     end
 
-    Rome -->|GET /wp-json/api/datasets| API
-    Antwerp -.->|GET /wp-json/api/datasets| API
+    Rome -->|"GET /wp-json/api/datasets"| API
+    Antwerp -.->|"GET /wp-json/api/datasets"| API
 ```
 
----
+## Architectural principles & pilot isolation
 
-## Architectural Principles & Pilot Isolation
-
-1. **Autonomous Pilot Instances**: Rather than coupling multiple European cities into a single global database, each municipality operates its own independent WordPress installation (e.g., `rome.bio-intel-mob.eu`).
-2. **Standardized REST Taxonomy**: All pilot deployments expose standardized endpoints under `/wp-json/api/`, ensuring that the Unity VR client can switch cities dynamically simply by updating its base URL.
-3. **CORS & Preflight Handling**: To facilitate web-based API testing and browser-based developer tooling, the WordPress servers support full Cross-Origin Resource Sharing (CORS):
+1. Autonomous Pilot Instances: Each municipality operates an independent WordPress installation, such as `rome.bio-intel-mob.eu`, with its own database.
+2. Standardized REST Taxonomy: Pilot deployments expose standardized endpoints under `/wp-json/api/`. The Unity VR client switches cities by updating its base URL.
+3. CORS & Preflight Handling: The WordPress servers support Cross-Origin Resource Sharing (CORS) for web-based API testing and browser developer tools:
    ```http
    Access-Control-Allow-Origin: *
    Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, PATCH, DELETE
@@ -40,18 +38,17 @@ flowchart LR
    Vary: Origin
    ```
 
----
+## Civic proposal data model & retrieval
 
-## Civic Proposal Data Model & Retrieval
-
-During application startup or when switching cities, the `APIManager` initiates an asynchronous HTTP request:
+At startup and when the user switches cities, the `APIManager` sends an asynchronous HTTP request:
 
 ```http
 GET https://rome.bio-intel-mob.eu/wp-json/api/datasets
 ```
 
-### JSON Response Schema
-The response payload contains batch metadata and a collection of geolocated citizen proposals:
+### JSON response schema
+
+The response contains batch metadata and geolocated citizen proposals:
 
 ```json
 {
@@ -79,24 +76,25 @@ The response payload contains batch metadata and a collection of geolocated citi
 }
 ```
 
-### Proposal Taxonomy
-- **Categories**:
+### Proposal taxonomy
+
+- Categories:
   - `TRANSPORT`: Public transit delays, bicycle lane deficits, bus stop placement.
   - `ENVIRONMENT`: Air quality, urban heat islands, lack of green canopy.
   - `ACCESSIBILITY`: Wheelchair obstructions, high curbs, broken ramps.
   - `INFRASTRUCTURE`: Road surface degradation, potholes, sidewalk fractures.
-- **Severity Levels**: `LOW`, `MEDIUM`, `HIGH`. Determines beacon color intensity and sorting priority in the UI filter matrix.
-- **Resolution States**: `PENDING`, `APPROVED`, `REJECTED`. Reflects the municipal administration's formal review state.
 
----
+- Severity Levels: `LOW`, `MEDIUM`, `HIGH`. Determines beacon color intensity and sorting priority in the UI filter matrix.
 
-## Geospatial Anchoring & Marker Lifecycle in Unity
+- Resolution States: `PENDING`, `APPROVED`, `REJECTED`. Reflects the municipal administration's formal review state.
 
-Once JSON data is unmarshalled, the `ProposalManagementService` instantiates a `ProposalMarker` entity for each entry:
+## Geospatial anchoring & marker lifecycle in Unity
+
+After the JSON is deserialized, the `ProposalManagementService` creates a `ProposalMarker` entity for each entry:
 
 ```mermaid
 flowchart TD
-    RawData["Proposal Record\n(lat: 41.9027, lon: 12.4962)"] --> GeoRef["CesiumGeoreference\nTransformLongitudeLatitudeHeightToUnity()"]
+    RawData["Proposal Record<br/>(lat: 41.9027, lon: 12.4962)"] --> GeoRef["CesiumGeoreference<br/>TransformLongitudeLatitudeHeightToUnity()"]
     GeoRef --> Spawn["Instantiate ProposalMarker Prefab"]
     Spawn --> Comp1["Ground Anchor & Terrain Clamp"]
     Spawn --> Comp2["Vertical Beacon Beam (Color-Coded)"]
@@ -104,17 +102,16 @@ flowchart TD
     Spawn --> Comp4["LOD Distance Fader (Spherical Culling)"]
 ```
 
-### Marker Subcomponents
-1. **Ground Anchor**: Binds to the terrain using a downward raycast against the active elevation mesh to prevent markers from floating above slopes.
-2. **Vertical Beacon Cylinder**: A high-visibility translucent light column rising $50\,\text{m}$ above the terrain, ensuring proposals can be spotted from orbital drone altitudes.
-3. **Category Glyph**: A 3D floating icon indicating the proposal type (*Transport*, *Greenery*, etc.).
-4. **Distance-Based LOD Culling**: When the user is flying at high altitudes ($> 1\,500\,\text{m}$), individual labels and colliders are disabled, rendering only the lightweight beacon column to maintain optimal GPU draw-call budgets.
+### Marker subcomponents
 
----
+1. Ground Anchor: Uses a downward raycast against the active elevation mesh to anchor markers to sloped terrain.
+2. Vertical Beacon Cylinder: A translucent, high-visibility light column rises $50\,\text{m}$ above the terrain so users can spot proposals from orbital drone altitudes.
+3. Category Glyph: A 3D floating icon indicating the proposal type (*Transport*, *Greenery*, etc.).
+4. Distance-Based LOD Culling: When the user is flying at high altitudes ($> 1\,500\,\text{m}$), individual labels and colliders are disabled. Only the lightweight beacon column is rendered to keep GPU draw calls within budget.
 
-## Intervention Persistence Architecture (Roadmap Contract)
+## Intervention persistence architecture (roadmap contract)
 
-While proposal retrieval is fully operational, saving interactive 3D street furniture placed during inspection sessions requires a versioned persistence contract.
+Proposal retrieval is operational. Saving 3D street furniture placed during inspection sessions requires the proposed versioned persistence contract described here.
 
 ```mermaid
 sequenceDiagram
@@ -134,7 +131,7 @@ sequenceDiagram
     REST-->>VR: HTTP 201 Created (Intervention ID & Timestamp)
 ```
 
-### Proposed Persistence Payload Specification
+### Proposed persistence payload specification
 ```json
 {
   "proposalId": 314,
@@ -160,7 +157,10 @@ sequenceDiagram
 }
 ```
 
-### Architectural Safeguards
-- **Anchor-Local Invariance**: Transformations are stored relative to the proposal's local coordinate frame $(x_{\text{local}}, y_{\text{local}}, z_{\text{local}})$, ensuring that changes in global city georeferencing or tile elevation do not corrupt the relative placement of furniture.
-- **Optimistic Locking**: Interventions include a `versionToken` to prevent concurrent inspection sessions from overwriting simultaneous community designs without conflict resolution.
-- **Spatial Validation**: The backend validates that all object positions fall strictly within the municipal workspace boundary radius ($r \le R_{\text{max}}$).
+### Architectural safeguards
+
+- Anchor-Local Invariance: Transforms are stored relative to the proposal's local coordinate frame $(x_{\text{local}}, y_{\text{local}}, z_{\text{local}})$, so changes to global city georeferencing or tile elevation preserve furniture placement relative to the anchor.
+
+- Optimistic Locking: Interventions include a `versionToken` so concurrent inspection sessions cannot overwrite community designs without conflict resolution.
+
+- Spatial Validation: The backend checks that all object positions stay within the municipal workspace boundary radius ($r \le R_{\text{max}}$).

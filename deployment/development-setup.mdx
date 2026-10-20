@@ -3,56 +3,60 @@ title: "Development & Environment Setup"
 description: "Unity 6 LTS, OpenXR, Cesium ion tokens, SUMO configuration, and Mintlify local preview."
 ---
 
-# Development & Environment Setup
+# Development & environment setup
 
-This guide details the setup procedures for both the **Unity VR client development environment** and the **Mintlify documentation portal**.
+Set up the Unity VR client and the Mintlify documentation site with the steps below.
 
----
+## Unity VR development environment
 
-## Unity VR Development Environment
+### Prerequisites & versions
 
-### Prerequisites & Versions
-- **Game Engine**: Unity 6 LTS (Version `6000.0.x` or later recommended) with Universal Render Pipeline (URP).
-- **XR Runtime**: OpenXR Plugin (`com.unity.xr.openxr`) and XR Interaction Toolkit (`com.unity.xr.interaction.toolkit` v3.x+).
-- **Geospatial Engine**: Cesium for Unity (v1.12+).
-- **Traffic Simulator**: Eclipse SUMO (v1.18.0+) with Python 3.10+ and TraCI bindings.
-- **Target Hardware**: Meta Quest 2 / 3 / Pro (via Oculus Link / AirLink), HTC Vive Focus 3, or PC VR-tethered HMDs.
+- Game Engine: Unity 6 LTS (Version `6000.0.x` or later recommended) with Universal Render Pipeline (URP).
 
-### Setup Instructions
+- XR Runtime: OpenXR Plugin (`com.unity.xr.openxr`) and XR Interaction Toolkit (`com.unity.xr.interaction.toolkit` v3.x+).
 
-1. **Clone the Repository**:
+- Geospatial Engine: Cesium for Unity (v1.12+).
+
+- Traffic Simulator: Eclipse SUMO (v1.18.0+) with Python 3.10+ and TraCI bindings.
+
+- Target Hardware: Meta Quest 2 / 3 / Pro (via Oculus Link / AirLink), HTC Vive Focus 3, or PC VR-tethered HMDs.
+
+### Setup instructions
+
+1. Clone the Repository:
    ```powershell
    git clone https://github.com/khadeer0503/CrowdSourcing_Virtual-Reality.git
    ```
-2. **Configure Cesium ion Token**:
-   - Navigate to **Cesium** > **Cesium ion** in the Unity Editor menu bar.
+2. Configure Cesium ion Token:
+   - Navigate to Cesium > Cesium ion in the Unity Editor menu bar.
    - Connect your Cesium ion account or specify a project-level access token with permissions for *Google Photorealistic 3D Tiles*.
-3. **Configure SUMO Path**:
-   - Ensure SUMO is installed on the host workstation.
+3. Configure SUMO Path:
+   - Install SUMO on the host workstation.
    - Set the system environment variable `SUMO_HOME`:
      ```powershell
      [System.Environment]::SetEnvironmentVariable('SUMO_HOME', 'C:\Program Files (x86)\Eclipse\Sumo', 'User')
      ```
    - Verify that the `sumo` and `sumo-gui` binaries are accessible in your system `PATH`.
-4. **OpenXR Controller Bindings**:
-   - In Unity Editor, go to **Project Settings** > **XR Plug-in Management** > **OpenXR**.
+4. OpenXR Controller Bindings:
+   - In Unity Editor, go to Project Settings > XR Plug-in Management > OpenXR.
    - Verify that interaction profiles are enabled for your target controllers (e.g., *Oculus Touch Controller Profile*, *HTC Vive Controller Profile*).
 
----
+## Mintlify documentation setup
 
-## Mintlify Documentation Setup
-
-The documentation site is built using **Mintlify** and can be run locally for rapid live-reload authoring.
+The documentation site uses Mintlify. Run it locally to preview changes with live reload.
 
 ### Prerequisites
+
 - Node.js 20.17.0+ (LTS recommended)
+
 - Git
+
 - Global Mintlify CLI:
   ```powershell
   npm install -g mint@latest
   ```
 
-### Local Preview & Validation
+### Local preview & validation
 
 ```powershell
 # Navigate to documentation directory
@@ -68,12 +72,10 @@ mint validate
 mint openapi-check openapi/wordpress.yaml
 ```
 
-Once running, preview the portal at [http://localhost:3000](http://localhost:3000).
+Preview the running site at [http://localhost:3000](http://localhost:3000).
 
----
+## Publishing & deployment workflow
 
-## Publishing & Deployment Workflow
-
-1. **Branch Strategy**: Commit updates to feature branches or `main`.
-2. **Continuous Deployment**: Connect the repository to the Mintlify dashboard. Pushes to `main` trigger automated build, linting, and global edge CDN deployment.
-3. **API Contract Verification**: Always run `mint openapi-check openapi/wordpress.yaml` before committing updates to REST specifications.
+1. Branch Strategy: Commit updates to feature branches or `main`.
+2. Continuous Deployment: Connect the repository to the Mintlify dashboard. Pushes to `main` trigger an automated build, linting, and deployment to the global edge CDN.
+3. API Contract Verification: Always run `mint openapi-check openapi/wordpress.yaml` before committing updates to REST specifications.

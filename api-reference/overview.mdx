@@ -5,33 +5,38 @@ description: "OpenAPI reference and guidance for the multi-site WordPress data s
 
 # WordPress API reference
 
-This section is generated from `openapi/wordpress.yaml`. It starts with the user-provided Rome dataset endpoint and will expand only after the WordPress plugin routes and payloads have been inspected.
+The API reference uses `openapi/wordpress.yaml` and currently covers the user-provided Rome dataset endpoint. Inspect the WordPress plugin routes and payloads before expanding the contract.
 
 ## Pilot sites
 
-The project uses separate WordPress deployments per city. Add a `servers` entry **only after verifying** each host exposes the same route and schema. When a site differs materially, use a separate OpenAPI file or clearly versioned contract.
+Each city has a separate WordPress deployment. Verify that a host exposes the same route and schema before adding a `servers` entry. Use a separate OpenAPI file or a clearly versioned contract when a site differs materially.
 
 ## API playground
 
-The Mintlify playground is configured to **interactive** mode (`"mode": "interactive"` in `docs.json`). This enables the "Send Request" / "Try It" button in the API documentation pages directly from the browser.
+The Mintlify playground uses interactive mode (`"mode": "interactive"` in `docs.json`), which enables the "Send Request" / "Try It" button in the browser.
 
-### CORS & Connectivity Verification
+### CORS & connectivity verification
 
-When making requests from the web browser at `https://ct-lup.mintlify.site` (or `http://localhost:3000` locally):
-- **DNS & Server**: Host `rome.bio-intel-mob.eu` resolves to IP `82.165.59.103` (nginx/1.30.4 + PHP 8.3).
-- **Endpoint**: `https://rome.bio-intel-mob.eu/wp-json/api/datasets`
-- **CORS Support**: The WordPress server responds dynamically with:
+For browser requests from `https://ct-lup.mintlify.site` (or `http://localhost:3000` locally):
+
+- DNS & Server: Host `rome.bio-intel-mob.eu` resolves to IP `82.165.59.103` (nginx/1.30.4 + PHP 8.3).
+
+- Endpoint: `https://rome.bio-intel-mob.eu/wp-json/api/datasets`
+
+- CORS Support: The WordPress server responds dynamically with:
   ```http
   Access-Control-Allow-Origin: <Request-Origin>
   Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, PATCH, DELETE
   Access-Control-Allow-Credentials: true
   Vary: Origin
   ```
-- **Preflight (OPTIONS)**: Successfully handled with HTTP 200 OK.
-- **Payload Shape**: Returns a JSON object with `id`, `city`, `generatedAt`, and an array of `proposals` (including geolocation coordinates, category, severity, status, images, and description).
+
+- Preflight (OPTIONS): Successfully handled with HTTP 200 OK.
+
+- Payload Shape: Returns a JSON object with `id`, `city`, `generatedAt`, and an array of `proposals` (including geolocation coordinates, category, severity, status, images, and description).
 
 > [!NOTE]
-> If calling from custom domains or local staging instances, ensure your origin is accepted by the server or that `Access-Control-Allow-Origin` permits your calling hostname. If requests fail in the browser, check DevTools Network tab for mixed content (HTTP vs HTTPS) or browser extensions blocking cross-origin requests.
+> For custom domains or local staging instances, check that the server accepts your origin or that `Access-Control-Allow-Origin` permits your hostname. If a browser request fails, check the DevTools Network tab for mixed content (HTTP vs HTTPS) and browser extensions that block cross-origin requests.
 
 ## Contract workflow
 

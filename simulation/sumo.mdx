@@ -3,49 +3,48 @@ title: "SUMO Traffic Simulation"
 description: "Microscopic traffic modeling, multithreaded UDP pipeline, SumoGeoConverter mathematics, and zero-allocation entity pooling."
 ---
 
-# SUMO Traffic Simulation Integration
+# SUMO traffic simulation integration
 
-The **Traffic Simulation System** bridges the BIO-INTEL-MOB virtual reality environment with **SUMO (Simulation of Urban MObility)**, an open-source microscopic traffic and pedestrian simulation suite. 
+The Traffic Simulation System connects the BIO-INTEL-MOB virtual reality environment to SUMO (Simulation of Urban MObility), an open-source suite for microscopic traffic and pedestrian simulation.
 
-Rather than simulating simplified traffic behaviors inside Unity scripts, the platform leverages SUMO's validated microscopic physics models (car-following, lane-changing, intersection signal controllers, and pedestrian models) while streaming real-time vehicle and pedestrian trajectories into Unity for immersive VR evaluation.
+SUMO provides the microscopic models for car-following, lane-changing, intersection signal controllers, and pedestrian movement. The system streams vehicle and pedestrian trajectories into Unity so users can evaluate scenarios in VR.
 
 ```mermaid
-flowchart LR
+flowchart TB
     subgraph SUMO_Process["External Simulation Process"]
         CFG["sumo.cfg / .net.xml"] --> SUMO_Core["SUMO Engine (Krauss / TraCI)"]
         SUMO_Core --> UDP_Pub["UDP Publisher Daemon"]
     end
 
     subgraph Unity_Runtime["Unity 6 VR Client"]
-        UDP_Sub["UdpReceiver\n(Dedicated Background Thread)"] --> Parser["UdpMessageParser\n(Fast Byte/JSON Parsing)"]
-        Parser --> Queue["Concurrent Queue\n(Thread-Safe Buffer)"]
-        Queue --> MTD["MainThreadDispatcher\n(Update Loop Sync)"]
-        MTD --> GeoConv["SumoGeoConverter\n(UTM -> WGS84 -> Unity)"]
-        GeoConv --> Pool["SumoObjectPool\n(VehiclePool & PedestrianPool)"]
+        UDP_Sub["UdpReceiver<br/>(Dedicated Background Thread)"] --> Parser["UdpMessageParser<br/>(Fast Byte/JSON Parsing)"]
+        Parser --> Queue["Concurrent Queue<br/>(Thread-Safe Buffer)"]
+        Queue --> MTD["MainThreadDispatcher<br/>(Update Loop Sync)"]
+        MTD --> GeoConv["SumoGeoConverter<br/>(UTM -> WGS84 -> Unity)"]
+        GeoConv --> Pool["SumoObjectPool<br/>(VehiclePool & PedestrianPool)"]
     end
 
-    UDP_Pub -.->|UDP Datagrams (5005)| UDP_Sub
+    UDP_Pub -.->|"UDP Datagrams (5005)"| UDP_Sub
 ```
 
----
+## Process management: `SumoLauncher`
 
-## Process Management: `SumoLauncher`
+The `SumoLauncher` service component starts and monitors the SUMO process:
 
-The execution of SUMO is managed through the `SumoLauncher` service component:
-- **Headless Execution**: Invokes the `sumo` or `sumo-gui` binary as a detached subprocess with arguments specifying the target scenario directory:
+- Headless execution: Starts the `sumo` or `sumo-gui` binary as a detached subprocess and passes the target scenario settings:
   ```powershell
   sumo -c scenario.sumocfg --remote-port 1337 --step-length 0.1 --start
   ```
-- **Scenario Artifacts**: Loads street network files (`.net.xml`), route flows (`.rou.xml`), and polygon shape definitions (`.poly.xml`) matching the active pilot inspection site.
-- **Process Supervision**: Monitors process health, captures stdout/stderr streams, and guarantees graceful termination when the VR user exits inspection mode.
 
----
+- Scenario artifacts: Loads the street network (`.net.xml`), route flows (`.rou.xml`), and polygon shapes (`.poly.xml`) for the active pilot inspection site.
 
-## Multithreaded Asynchronous Networking Pipeline
+- Process supervision: Monitors process health, captures stdout and stderr, and terminates the process cleanly when the VR user exits inspection mode.
 
-Unity operates on a single main thread for game logic and rendering. Performing synchronous socket reads or unmarshalling large JSON packets directly inside the render loop causes severe frame rate drops, dropping below the mandatory 90 FPS VR budget.
+## Multithreaded asynchronous networking pipeline
 
-To maintain ultra-smooth VR rendering, the platform implements a **three-tier asynchronous pipeline**:
+Unity runs game logic and rendering on its main thread. Synchronous socket reads or large JSON payloads processed in the render loop can reduce frame rates below the required 90 FPS VR budget.
+
+A three-tier asynchronous pipeline keeps network processing out of the render loop:
 
 ```mermaid
 sequenceDiagram
@@ -63,82 +62,92 @@ sequenceDiagram
     Main->>Pool: Update Vehicle Poses & Recycle Inactive Entities
 ```
 
-### 1. `UdpReceiver` (Dedicated Background Socket Thread)
+### 1. `UdpReceiver` (Dedicated background socket thread)
+
 - Runs continuously on a high-priority background worker thread.
-- Binds to a local UDP socket (`UdpClient`), listening for incoming datagrams asynchronously.
-- Operates completely decoupled from Unity's rendering framerate.
+
+- Binds to a local UDP socket (`UdpClient`) and listens for datagrams asynchronously.
+
+- Remains independent of Unity's rendering frame rate.
 
 ### 2. `UdpMessageParser`
-- Parses incoming frame datagrams with minimal memory allocations.
+
+- Parses incoming frame datagrams with minimal memory allocation.
+
 - Extracts entity IDs, simulation coordinates $(x_{\text{sumo}}, y_{\text{sumo}})$, speed $v$, vehicle type, and heading angle $\theta_{\text{sumo}}$.
 
 ### 3. `MainThreadDispatcher`
-- Stores parsed frame structures into a thread-safe `ConcurrentQueue<SimulationFrame>`.
-- During Unity's `Update()` loop, the dispatcher dequeues only the latest available frame, discarding stale intermediate packets and safely passing the data to Unity scene objects.
 
----
+- Stores parsed frame structures in a thread-safe `ConcurrentQueue<SimulationFrame>`.
 
-## Geospatial Coordinate Transformation: `SumoGeoConverter`
+- During Unity's `Update()` loop, it dequeues the latest available frame, discards stale intermediate packets, and passes the data safely to Unity scene objects.
 
-SUMO uses a local 2D metric Cartesian coordinate system defined by the projected road network, whereas Unity positions entities within a georeferenced 3D space. 
+## Geospatial coordinate transformation: `SumoGeoConverter`
 
-The `SumoGeoConverter` executes a three-stage mathematical transformation pipeline:
+SUMO uses a local 2D metric Cartesian coordinate system based on the projected road network. Unity places those entities in a georeferenced 3D space.
+
+`SumoGeoConverter` converts positions from SUMO Cartesian coordinates to WGS84 and then Unity world space. A separate calculation converts each entity's heading to a Unity orientation:
 
 ```mermaid
 flowchart LR
-    S1["1. SUMO Cartesian\n(x_sumo, y_sumo)"] -->|UTM Inverse Projection| S2["2. WGS84 Geographic\n(Latitude φ, Longitude λ)"]
-    S2 -->|CesiumGeoreference| S3["3. Unity World Position\n(X_unity, Y_unity, Z_unity)"]
-    S4["4. SUMO Heading\nθ_sumo (Clockwise from North)"] -->|AngleAxis(θ, Up)| S5["5. Unity Orientation\nQuaternion R_world"]
+    S1["1. SUMO Cartesian<br/>(x_sumo, y_sumo)"] -->|"UTM Inverse Projection"| S2["2. WGS84 Geographic<br/>(Latitude φ, Longitude λ)"]
+    S2 -->|"CesiumGeoreference"| S3["3. Unity World Position<br/>(X_unity, Y_unity, Z_unity)"]
+    S4["4. SUMO Heading<br/>θ_sumo (Clockwise from North)"] -->|"AngleAxis(θ, Up)"| S5["5. Unity Orientation<br/>Quaternion R_world"]
 ```
 
-### Mathematical Formulations
+### Mathematical formulations
 
-#### 1. Cartesian to WGS84 Geographic
-Using the network's Universal Transverse Mercator (UTM) projection parameters $(\lambda_0, \phi_0, k_0, x_0, y_0)$ extracted from the `.net.xml` header:
+#### 1. Cartesian to WGS84 geographic
+
+Using the network's Universal Transverse Mercator (UTM) projection parameters $(\lambda_0, \phi_0, k_0, x_0, y_0)$ from the `.net.xml` header:
 $$(\phi, \lambda) = \mathcal{T}_{\text{UTM}}^{-1}(x_{\text{sumo}} - x_0, \, y_{\text{sumo}} - y_0)$$
 
-#### 2. WGS84 to Unity World Space
-The geographic coordinate pair $(\phi, \lambda)$ and local street surface elevation $h$ are passed into `CesiumGeoreference`:
+#### 2. WGS84 to Unity world space
+
+The geographic coordinate pair $(\phi, \lambda)$ and local street surface elevation $h$ are passed to `CesiumGeoreference`:
 $$\vec{P}_{\text{world}} = \text{CesiumGeoreference.TransformLongitudeLatitudeHeightToUnity}(\lambda, \phi, h)$$
 
-#### 3. Vehicle Heading & Orientation
-SUMO defines vehicle rotation angle $\theta_{\text{sumo}}$ in degrees clockwise from North ($0^\circ = \text{North}, 90^\circ = \text{East}$). 
+#### 3. Vehicle heading & orientation
 
-In Unity's left-handed coordinate system (where $+Z$ is North and $+X$ is East), the 3D rotation quaternion $\mathbf{R}_{\text{world}}$ relative to the local ground normal $\vec{U}_{\text{local}}$ is:
+SUMO defines the vehicle rotation angle $\theta_{\text{sumo}}$ in degrees clockwise from North ($0^\circ = \text{North}, 90^\circ = \text{East}$).
+
+In Unity's left-handed coordinate system, where $+Z$ is North and $+X$ is East, the 3D rotation quaternion $\mathbf{R}_{\text{world}}$ uses the local ground normal $\vec{U}_{\text{local}}$ as its rotation axis:
 $$\mathbf{R}_{\text{world}} = \text{Quaternion.AngleAxis}(\theta_{\text{sumo}}, \, \vec{U}_{\text{local}})$$
 
----
+## High-performance object pooling architecture
 
-## High-Performance Object Pooling Architecture
+Hundreds of vehicles and pedestrians can enter and leave the street inspection area during a dense urban simulation.
 
-In dense urban simulations, hundreds of vehicles and pedestrians continuously enter, traverse, and exit the street inspection area. 
-
-Calling `GameObject.Instantiate()` and `GameObject.Destroy()` dynamically would trigger frequent garbage collection (GC) sweeps on the Mono/IL2CPP heap, causing noticeable hitching in the VR headset.
+Calling `GameObject.Instantiate()` and `GameObject.Destroy()` for every entity would trigger frequent garbage collection (GC) on the Mono/IL2CPP heap, causing visible hitching in the VR headset.
 
 ```mermaid
 flowchart TD
     subgraph Pool_Lifecycle["SumoObjectPool Lifecycle"]
-        Init["Pre-warm Pool at Startup\n(Instantiate N Dormant Instances)"] --> ActiveCheck{Vehicle Active in Frame?}
-        ActiveCheck -- Yes: First Encounter --> Acquire["Acquire Dormant Instance\nActivate Mesh & Colliders"]
-        ActiveCheck -- Yes: Already Active --> UpdatePose["Update Position P_world\n& Rotation R_world"]
-        ActiveCheck -- No: Exited Network --> Release["Release Instance to Pool\nDeactivate GameObject"]
+        Init["Pre-warm Pool at Startup<br/>(Instantiate N Dormant Instances)"] --> ActiveCheck{"Vehicle Active in Frame?"}
+        ActiveCheck -->|"Yes: First Encounter"| Acquire["Acquire Dormant Instance<br/>Activate Mesh & Colliders"]
+        ActiveCheck -->|"Yes: Already Active"| UpdatePose["Update Position P_world<br/>& Rotation R_world"]
+        ActiveCheck -->|"No: Exited Network"| Release["Release Instance to Pool<br/>Deactivate GameObject"]
         Acquire --> UpdatePose
         Release --> ActiveCheck
     end
 ```
 
-### Zero-Allocation Pool Mechanics
-- **Pre-warmed Capacity**: `VehiclePool` and `PedestrianPool` pre-allocate pools of diverse vehicle categories (cars, vans, buses, bicycles) and animated pedestrian avatars.
-- **Fast Lookup Table**: An active dictionary `Dictionary<string, PooledAgent>` tracks active vehicle IDs.
-- **`Acquire(vehicleId, type)`**: When an ID first appears in the UDP frame, an inactive GameObject is taken from the pool queue, enabled, and assigned to the active table.
-- **`Release(vehicleId)`**: When an ID disappears from incoming frames for more than $\Delta t_{\text{timeout}}$, its GameObject is deactivated and returned to the dormant queue.
-- **Net Result**: Zero heap allocations per frame during active traffic simulation.
+### Zero-allocation pool mechanics
 
----
+- Pre-warmed capacity: `VehiclePool` and `PedestrianPool` pre-allocate cars, vans, buses, bicycles, and animated pedestrian avatars.
 
-## Evaluating Urban Interventions via Simulation
+- Fast lookup table: A `Dictionary<string, PooledAgent>` tracks active vehicle IDs.
 
-The integration of SUMO enables real-time visual assessment of street modifications:
-1. **Traffic Calming Interventions**: Placing speed humps or chicane bollards in the `StreetWorkspace` can be reflected in SUMO as reduced edge speeds or modified lane widths.
-2. **Pedestrian Crossing Additions**: Adding crosswalk assets allows planners to trigger pedestrian demand in SUMO, observing vehicle stopping behavior and potential vehicle queue build-up.
-3. **Evidence-Based Co-Design**: Citizens and city officials can observe dynamic simulation feedback before committing municipal infrastructure investments.
+- `Acquire(vehicleId, type)`: When an ID first appears in a UDP frame, the system takes an inactive GameObject from the pool queue, enables it, and adds it to the active table.
+
+- `Release(vehicleId)`: When an ID is absent from incoming frames for more than $\Delta t_{\text{timeout}}$, the system deactivates its GameObject and returns it to the dormant queue.
+
+- Result: Active traffic simulation uses zero heap allocations per frame.
+
+## Evaluating urban interventions via simulation
+
+Users can assess street modifications in real time with SUMO:
+
+1. Traffic Calming Interventions: Speed humps or chicane bollards placed in the `StreetWorkspace` can be represented in SUMO through reduced edge speeds or modified lane widths.
+2. Pedestrian Crossing Additions: Adding crosswalk assets lets planners trigger pedestrian demand in SUMO and observe vehicle stopping behavior and potential queue build-up.
+3. Evidence-Based Co-Design: Citizens and city officials can review simulation feedback before committing to municipal infrastructure investments.

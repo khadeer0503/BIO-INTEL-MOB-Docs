@@ -1,11 +1,13 @@
-# BIO-INTEL-MOB Documentation
+# BIO-INTEL-MOB documentation
 
-Central documentation source for BIO-INTEL-MOB / Smart Urbanity VR. Hosted with Mintlify.
+This repository contains the BIO-INTEL-MOB VR documentation, hosted with Mintlify.
 
 ## Prerequisites
 
 - Node.js >= 20.17.0 (supported LTS preferred)
+
 - Git
+
 - Mintlify CLI: `npm install -g mint@latest`
 
 ## Preview
@@ -34,7 +36,7 @@ mint openapi-check openapi/wordpress.yaml
 
 ## API accuracy policy
 
-The initial `openapi/wordpress.yaml` is a **minimal draft** for the user-provided Rome GET endpoint. It is **not** a validated full schema. Compare it against the WordPress plugin route registrations and actual response payloads before treating it as an authoritative contract. Do not invent query parameters, writable endpoints, authentication mechanisms, or JSON fields. The API playground is intentionally in **simple** (non-executing) mode.
+The initial `openapi/wordpress.yaml` is a draft contract for the user-provided Rome GET endpoint. Verify its schema against the WordPress plugin route registrations and actual response payloads before treating it as authoritative. Add query parameters, writable endpoints, authentication mechanisms, and JSON fields only when the implementation supports them. The API playground uses interactive mode, as configured in `docs.json`.
 
 ## Publishing and security
 
@@ -42,8 +44,4 @@ Keep internal credentials, cookies, API keys, service endpoints not intended for
 
 ## Repository migration
 
-The testing repository is `khadeer0503/BIO-INTEL-MOB-Docs`. Later, transfer it to `ctlup` using GitHub's repository transfer workflow (subject to organization permissions) or push a complete clone to a new organization repo. Update Mintlify's connected repository setting and GitHub App access after moving.
-
-# BIO-INTEL-MOB-Docs
-VR Documentation - Mintlify
-
+The testing repository is `khadeer0503/BIO-INTEL-MOB-Docs`. To move it to `ctlup`, use GitHub's repository transfer workflow, subject to organization permissions, or push a complete clone to a new organization repository. After the move, update Mintlify's connected repository setting and GitHub App access.
