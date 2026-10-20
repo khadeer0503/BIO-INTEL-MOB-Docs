@@ -9,11 +9,14 @@ The BIO-INTEL-MOB Backend Subsystem stores data, aggregates civic proposals, and
 
 Each pilot site has a WordPress REST API tailored to its administrative infrastructure. These lightweight, content-managed endpoints replace the retired monolithic Spring Boot backend.
 
+The eight pilots are Cascais, Kyiv, Melsungen, Rhodes, Riga, Rome, Urla, and Vilnius. The [API reference](/api-reference/overview) lists their URLs and groups the available endpoints by pilot name.
+
 ```mermaid
 flowchart LR
-    subgraph Municipal_Backends["Municipal Cloud Deployments"]
+    subgraph Municipal_Backends["Eight Pilot WordPress Deployments"]
         Rome["Rome Pilot WordPress<br/>(rome.bio-intel-mob.eu)"]
-        Antwerp["Antwerp Pilot WordPress<br/>(antwerp.bio-intel-mob.eu)"]
+        Cascais["Cascais Pilot WordPress<br/>(cascais.bio-intel-mob.eu)"]
+        Others["Kyiv, Melsungen, Rhodes,<br/>Riga, Urla, Vilnius"]
     end
 
     subgraph Unity_Client["Unity VR Runtime"]
@@ -23,7 +26,8 @@ flowchart LR
     end
 
     Rome -->|"GET /wp-json/api/datasets"| API
-    Antwerp -.->|"GET /wp-json/api/datasets"| API
+    Cascais -->|"GET /wp-json/api/datasets"| API
+    Others -->|"GET /wp-json/api/datasets"| API
 ```
 
 ## Architectural principles & pilot isolation
@@ -32,7 +36,7 @@ flowchart LR
 2. Standardized REST Taxonomy: Pilot deployments expose standardized endpoints under `/wp-json/api/`. The Unity VR client switches cities by updating its base URL.
 3. CORS & Preflight Handling: The WordPress servers support Cross-Origin Resource Sharing (CORS) for web-based API testing and browser developer tools:
    ```http
-   Access-Control-Allow-Origin: *
+   Access-Control-Allow-Origin: <Request-Origin>
    Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, PATCH, DELETE
    Access-Control-Allow-Credentials: true
    Vary: Origin

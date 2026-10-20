@@ -1,48 +1,82 @@
 ---
 title: "WordPress API Reference"
-description: "OpenAPI reference and guidance for the multi-site WordPress data services."
+description: "Verified dataset endpoints and REST discovery routes for all eight BIO-INTEL-MOB pilot sites."
 ---
 
 # WordPress API reference
 
-The API reference uses `openapi/wordpress.yaml` and currently covers the user-provided Rome dataset endpoint. Inspect the WordPress plugin routes and payloads before expanding the contract.
+Each BIO-INTEL-MOB pilot has a separate WordPress deployment. Select a pilot by name in the sidebar to see its endpoint URLs, request examples, response schema, and interactive request builder.
+
+The [shared dataset reference](/api-reference/datasets/retrieve-datasets) provides the same contract with a server selector for all eight pilots. Rome remains the default server on that shared page. Dedicated pilot pages use the corresponding pilot server.
 
 ## Pilot sites
 
-Each city has a separate WordPress deployment. Verify that a host exposes the same route and schema before adding a `servers` entry. Use a separate OpenAPI file or a clearly versioned contract when a site differs materially.
+| Pilot | Dataset endpoint | API reference |
+| :--- | :--- | :--- |
+| Cascais | `https://cascais.bio-intel-mob.eu/wp-json/api/datasets` | [Cascais endpoints](/api-reference/pilots/cascais/datasets/retrieve-datasets) |
+| Kyiv | `https://kyiv.bio-intel-mob.eu/wp-json/api/datasets` | [Kyiv endpoints](/api-reference/pilots/kyiv/datasets/retrieve-datasets) |
+| Melsungen | `https://melsungen.bio-intel-mob.eu/wp-json/api/datasets` | [Melsungen endpoints](/api-reference/pilots/melsungen/datasets/retrieve-datasets) |
+| Rhodes | `https://rhodes.bio-intel-mob.eu/wp-json/api/datasets` | [Rhodes endpoints](/api-reference/pilots/rhodes/datasets/retrieve-datasets) |
+| Riga | `https://riga.bio-intel-mob.eu/wp-json/api/datasets` | [Riga endpoints](/api-reference/pilots/riga/datasets/retrieve-datasets) |
+| Rome | `https://rome.bio-intel-mob.eu/wp-json/api/datasets` | [Rome endpoints](/api-reference/pilots/rome/datasets/retrieve-datasets) |
+| Urla | `https://urla.bio-intel-mob.eu/wp-json/api/datasets` | [Urla endpoints](/api-reference/pilots/urla/datasets/retrieve-datasets) |
+| Vilnius | `https://vilnius.bio-intel-mob.eu/wp-json/api/datasets` | [Vilnius endpoints](/api-reference/pilots/vilnius/datasets/retrieve-datasets) |
+
+## Available operations
+
+Each pilot section includes these public GET operations. Paths are relative to that pilot's `https://<pilot>.bio-intel-mob.eu/wp-json` base URL.
+
+| Method | Path | Purpose |
+| :--- | :--- | :--- |
+| `GET` | `/api/datasets` | Retrieve dataset metadata and civic proposals for the VR application. |
+| `GET` | `/api` | Inspect the registered project routes and their request argument metadata. |
+| `GET` | `/` | Inspect the WordPress REST index and its registered namespaces. |
+
+`GET /api/datasets` is currently the only application data operation registered in the `api` namespace. It requires no authentication and declares no query parameters. The other two operations expose REST discovery metadata. WordPress core, administration, and third-party plugin routes listed in the REST index are outside this application contract.
+
+The dataset response contains `id`, `city`, `generatedAt`, and `proposals`. An empty `proposals` array is a successful response. Treat `city` as the string supplied by the backend; its capitalization can vary between pilots. Examples show an illustrative empty dataset, while the schema describes the proposal fields returned when records are available.
+
+The proposed intervention-saving workflow in the [backend documentation](/backend/wordpress#intervention-persistence-architecture-roadmap-contract) remains a roadmap contract. A broad CORS methods header does not establish that a POST, PUT, PATCH, or DELETE operation exists.
 
 ## API playground
 
-The Mintlify playground uses interactive mode (`"mode": "interactive"` in `docs.json`), which enables the "Send Request" / "Try It" button in the browser.
+Open the relevant pilot's endpoint page and use **Send Request** to call that pilot. On the shared pages, choose the pilot in the server selector before sending the request or copying a generated example. The selected server determines the request URL.
 
-### CORS & connectivity verification
+For example, this request retrieves Cascais data:
 
-For browser requests from `https://ct-lup.mintlify.site` (or `http://localhost:3000` locally):
+```bash
+curl --request GET \
+  --url https://cascais.bio-intel-mob.eu/wp-json/api/datasets
+```
 
-- DNS & Server: Host `rome.bio-intel-mob.eu` resolves to IP `82.165.59.103` (nginx/1.30.4 + PHP 8.3).
+The same route on the Rome server retrieves Rome data:
 
-- Endpoint: `https://rome.bio-intel-mob.eu/wp-json/api/datasets`
+```bash
+curl --request GET \
+  --url https://rome.bio-intel-mob.eu/wp-json/api/datasets
+```
 
-- CORS Support: The WordPress server responds dynamically with:
-  ```http
-  Access-Control-Allow-Origin: <Request-Origin>
-  Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, PATCH, DELETE
-  Access-Control-Allow-Credentials: true
-  Vary: Origin
-  ```
+## Verification and browser access
 
-- Preflight (OPTIONS): Successfully handled with HTTP 200 OK.
+On **20 October 2026**, all eight pilots returned HTTP 200 for the REST index, project route index, dataset request, and dataset OPTIONS preflight. Their project route registrations and dataset response shapes were inspected directly. The repository's `api-reference/pilot-api-verification.json` snapshot records metadata and field types without storing proposal text or media URLs.
 
-- Payload Shape: Returns a JSON object with `id`, `city`, `generatedAt`, and an array of `proposals` (including geolocation coordinates, category, severity, status, images, and description).
+For the documentation origin `https://ct-lup.mintlify.site`, the dataset GET and OPTIONS responses included `Access-Control-Allow-Origin: https://ct-lup.mintlify.site` and `Access-Control-Allow-Credentials: true`. The preflight allowed GET. These checks describe the deployment at that time; they do not guarantee future availability or support for every custom origin.
 
-> [!NOTE]
-> For custom domains or local staging instances, check that the server accepts your origin or that `Access-Control-Allow-Origin` permits your hostname. If a browser request fails, check the DevTools Network tab for mixed content (HTTP vs HTTPS) and browser extensions that block cross-origin requests.
+For local previews or custom documentation domains, verify that the API accepts the calling origin. If a browser request fails, inspect the DevTools Network tab for CORS errors, mixed content, and extensions that block requests.
 
-## Contract workflow
+The public route index does not expose the WordPress plugin's source code or every backend validation rule. The response schemas describe the payloads observed during verification. A pilot with no proposals allows verification of the dataset envelope, but not that pilot's individual proposal records.
 
-1. Inspect the route registration in the WordPress plugin.
-2. Capture a sanitized, representative response from staging.
-3. Add explicit schemas, parameters, errors and authorization details to OpenAPI (`openapi/wordpress.yaml`).
-4. Validate with `mint openapi-check openapi/wordpress.yaml`.
-5. Review and merge the documentation change.
+## Maintaining the API reference
+
+`openapi/pilots.json` contains the pilot names and server URLs. `openapi/wordpress.yaml` defines the shared operations and response models. Files in `openapi/pilots/` are generated as self-contained specifications because Mintlify does not support external OpenAPI references.
+
+1. Check deployed route registrations and responses before adding an operation. Inspect the plugin source when changing authentication, validation, or write behavior.
+2. Update the pilot registry or shared contract. If a pilot's contract differs, model the difference explicitly before regenerating its specification.
+3. Run `npm ci`, then `npm run api:generate` to regenerate the pilot specifications and API navigation.
+4. Run `npm run api:check`, `mint validate`, and `mint broken-links`.
+5. Refresh the deployment audit with the read-only command below, review its results, and commit the documentation changes for deployment.
+
+```powershell
+python scripts/audit-pilot-apis.py --output api-reference/pilot-api-verification.json
+```
 

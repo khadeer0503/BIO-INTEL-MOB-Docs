@@ -68,8 +68,10 @@ mint dev
 # Validate documentation links and frontmatter
 mint validate
 
-# Validate the OpenAPI WordPress contract
-mint openapi-check openapi/wordpress.yaml
+# Generate and check the shared and per-pilot OpenAPI contracts
+npm ci
+npm run api:generate
+npm run api:check
 ```
 
 Preview the running site at [http://localhost:3000](http://localhost:3000).
@@ -78,4 +80,4 @@ Preview the running site at [http://localhost:3000](http://localhost:3000).
 
 1. Branch Strategy: Commit updates to feature branches or `main`.
 2. Continuous Deployment: Connect the repository to the Mintlify dashboard. Pushes to `main` trigger an automated build, linting, and deployment to the global edge CDN.
-3. API Contract Verification: Always run `mint openapi-check openapi/wordpress.yaml` before committing updates to REST specifications.
+3. API Contract Verification: After editing a pilot URL or shared operation, run `npm run api:generate`, `npm run api:check`, and `mint validate` before committing the specifications. Refresh the deployment audit when checking live API behavior; see the [API maintenance workflow](/api-reference/overview#maintaining-the-api-reference).

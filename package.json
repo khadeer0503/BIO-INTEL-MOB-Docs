@@ -1,0 +1,9 @@
+{
+  "name": "bio-intel-mob-docs",
+  "private": true,
+  "scripts": {
+    "api:generate": "node scripts/generate-pilot-specs.mjs",
+    "api:check": "node scripts/generate-pilot-specs.mjs --check"
+  },
+  "devDependencies": { "yaml": "^2.8.1" }
+}

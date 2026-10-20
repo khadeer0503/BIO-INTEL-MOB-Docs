@@ -1,0 +1,10 @@
+[
+  { "name": "Cascais", "slug": "cascais", "server": "https://cascais.bio-intel-mob.eu/wp-json" },
+  { "name": "Kyiv", "slug": "kyiv", "server": "https://kyiv.bio-intel-mob.eu/wp-json" },
+  { "name": "Melsungen", "slug": "melsungen", "server": "https://melsungen.bio-intel-mob.eu/wp-json" },
+  { "name": "Rhodes", "slug": "rhodes", "server": "https://rhodes.bio-intel-mob.eu/wp-json" },
+  { "name": "Riga", "slug": "riga", "server": "https://riga.bio-intel-mob.eu/wp-json" },
+  { "name": "Rome", "slug": "rome", "server": "https://rome.bio-intel-mob.eu/wp-json", "default": true },
+  { "name": "Urla", "slug": "urla", "server": "https://urla.bio-intel-mob.eu/wp-json" },
+  { "name": "Vilnius", "slug": "vilnius", "server": "https://vilnius.bio-intel-mob.eu/wp-json" }
+]

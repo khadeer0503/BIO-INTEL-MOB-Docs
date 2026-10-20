@@ -1,0 +1,949 @@
+{
+  "checkedAt": "2026-10-20T09:32:46.036829+00:00",
+  "pilots": [
+    {
+      "pilot": "Cascais",
+      "server": "https://cascais.bio-intel-mob.eu/wp-json",
+      "discovery": {
+        "status": 200,
+        "error": null,
+        "namespaces": [
+          "oembed/1.0",
+          "wordfence-login-security/v1",
+          "wordfence/v1",
+          "v1",
+          "api",
+          "wp-mail-smtp/setup-wizard/v1",
+          "astra/v1",
+          "nps-survey/v1",
+          "wp/v2",
+          "wp-site-health/v1",
+          "wp-block-editor/v1",
+          "wp-abilities/v1"
+        ],
+        "routes": {
+          "/api": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": {
+                  "namespace": {
+                    "default": "api",
+                    "required": false
+                  },
+                  "context": {
+                    "default": "view",
+                    "required": false
+                  }
+                }
+              }
+            ]
+          },
+          "/api/datasets": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": []
+              }
+            ]
+          }
+        }
+      },
+      "projectIndex": {
+        "status": 200,
+        "error": null,
+        "namespace": "api",
+        "routes": [
+          "/api",
+          "/api/datasets"
+        ]
+      },
+      "datasets": {
+        "status": 200,
+        "error": null,
+        "validEnvelope": true,
+        "city": "Cascais",
+        "shape": {
+          "id": "integer",
+          "city": "string",
+          "generatedAt": "string",
+          "proposals": {
+            "type": "array",
+            "count": 1,
+            "itemShapes": [
+              {
+                "category": "string",
+                "date": "string",
+                "description": "string",
+                "id": "integer",
+                "images": {
+                  "count": 0,
+                  "itemShapes": [],
+                  "type": "array"
+                },
+                "latitude": "number",
+                "longitude": "number",
+                "severity": "string",
+                "status": "string",
+                "title": "string",
+                "video": "null",
+                "votes": "integer"
+              }
+            ]
+          }
+        },
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      },
+      "preflight": {
+        "origin": "https://ct-lup.mintlify.site",
+        "status": 200,
+        "error": null,
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      }
+    },
+    {
+      "pilot": "Kyiv",
+      "server": "https://kyiv.bio-intel-mob.eu/wp-json",
+      "discovery": {
+        "status": 200,
+        "error": null,
+        "namespaces": [
+          "oembed/1.0",
+          "wordfence-login-security/v1",
+          "wordfence/v1",
+          "v1",
+          "api",
+          "wp-mail-smtp/setup-wizard/v1",
+          "astra/v1",
+          "nps-survey/v1",
+          "wp/v2",
+          "wp-site-health/v1",
+          "wp-block-editor/v1",
+          "wp-abilities/v1"
+        ],
+        "routes": {
+          "/api": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": {
+                  "namespace": {
+                    "default": "api",
+                    "required": false
+                  },
+                  "context": {
+                    "default": "view",
+                    "required": false
+                  }
+                }
+              }
+            ]
+          },
+          "/api/datasets": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": []
+              }
+            ]
+          }
+        }
+      },
+      "projectIndex": {
+        "status": 200,
+        "error": null,
+        "namespace": "api",
+        "routes": [
+          "/api",
+          "/api/datasets"
+        ]
+      },
+      "datasets": {
+        "status": 200,
+        "error": null,
+        "validEnvelope": true,
+        "city": "kyiv",
+        "shape": {
+          "id": "integer",
+          "city": "string",
+          "generatedAt": "string",
+          "proposals": {
+            "type": "array",
+            "count": 2,
+            "itemShapes": [
+              {
+                "category": "string",
+                "date": "string",
+                "description": "string",
+                "id": "integer",
+                "images": {
+                  "count": 0,
+                  "itemShapes": [],
+                  "type": "array"
+                },
+                "latitude": "number",
+                "longitude": "number",
+                "severity": "string",
+                "status": "string",
+                "title": "string",
+                "video": "null",
+                "votes": "integer"
+              },
+              {
+                "category": "string",
+                "date": "string",
+                "description": "string",
+                "id": "integer",
+                "images": {
+                  "count": 1,
+                  "itemShapes": [
+                    "string"
+                  ],
+                  "type": "array"
+                },
+                "latitude": "number",
+                "longitude": "number",
+                "severity": "string",
+                "status": "string",
+                "title": "string",
+                "video": "null",
+                "votes": "integer"
+              }
+            ]
+          }
+        },
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      },
+      "preflight": {
+        "origin": "https://ct-lup.mintlify.site",
+        "status": 200,
+        "error": null,
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      }
+    },
+    {
+      "pilot": "Melsungen",
+      "server": "https://melsungen.bio-intel-mob.eu/wp-json",
+      "discovery": {
+        "status": 200,
+        "error": null,
+        "namespaces": [
+          "oembed/1.0",
+          "wordfence-login-security/v1",
+          "wordfence/v1",
+          "v1",
+          "api",
+          "wp-mail-smtp/setup-wizard/v1",
+          "astra/v1",
+          "nps-survey/v1",
+          "wp/v2",
+          "wp-site-health/v1",
+          "wp-block-editor/v1",
+          "wp-abilities/v1"
+        ],
+        "routes": {
+          "/api": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": {
+                  "namespace": {
+                    "default": "api",
+                    "required": false
+                  },
+                  "context": {
+                    "default": "view",
+                    "required": false
+                  }
+                }
+              }
+            ]
+          },
+          "/api/datasets": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": []
+              }
+            ]
+          }
+        }
+      },
+      "projectIndex": {
+        "status": 200,
+        "error": null,
+        "namespace": "api",
+        "routes": [
+          "/api",
+          "/api/datasets"
+        ]
+      },
+      "datasets": {
+        "status": 200,
+        "error": null,
+        "validEnvelope": true,
+        "city": "Melsungen",
+        "shape": {
+          "id": "integer",
+          "city": "string",
+          "generatedAt": "string",
+          "proposals": {
+            "type": "array",
+            "count": 0,
+            "itemShapes": []
+          }
+        },
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      },
+      "preflight": {
+        "origin": "https://ct-lup.mintlify.site",
+        "status": 200,
+        "error": null,
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      }
+    },
+    {
+      "pilot": "Rhodes",
+      "server": "https://rhodes.bio-intel-mob.eu/wp-json",
+      "discovery": {
+        "status": 200,
+        "error": null,
+        "namespaces": [
+          "oembed/1.0",
+          "wordfence-login-security/v1",
+          "wordfence/v1",
+          "v1",
+          "api",
+          "wp-mail-smtp/setup-wizard/v1",
+          "astra/v1",
+          "nps-survey/v1",
+          "wp/v2",
+          "wp-site-health/v1",
+          "wp-block-editor/v1",
+          "wp-abilities/v1"
+        ],
+        "routes": {
+          "/api": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": {
+                  "namespace": {
+                    "default": "api",
+                    "required": false
+                  },
+                  "context": {
+                    "default": "view",
+                    "required": false
+                  }
+                }
+              }
+            ]
+          },
+          "/api/datasets": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": []
+              }
+            ]
+          }
+        }
+      },
+      "projectIndex": {
+        "status": 200,
+        "error": null,
+        "namespace": "api",
+        "routes": [
+          "/api",
+          "/api/datasets"
+        ]
+      },
+      "datasets": {
+        "status": 200,
+        "error": null,
+        "validEnvelope": true,
+        "city": "Rhodes",
+        "shape": {
+          "id": "integer",
+          "city": "string",
+          "generatedAt": "string",
+          "proposals": {
+            "type": "array",
+            "count": 0,
+            "itemShapes": []
+          }
+        },
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      },
+      "preflight": {
+        "origin": "https://ct-lup.mintlify.site",
+        "status": 200,
+        "error": null,
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      }
+    },
+    {
+      "pilot": "Riga",
+      "server": "https://riga.bio-intel-mob.eu/wp-json",
+      "discovery": {
+        "status": 200,
+        "error": null,
+        "namespaces": [
+          "oembed/1.0",
+          "wordfence-login-security/v1",
+          "wordfence/v1",
+          "v1",
+          "api",
+          "wp-mail-smtp/setup-wizard/v1",
+          "astra/v1",
+          "nps-survey/v1",
+          "wp/v2",
+          "wp-site-health/v1",
+          "wp-block-editor/v1",
+          "wp-abilities/v1"
+        ],
+        "routes": {
+          "/api": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": {
+                  "namespace": {
+                    "default": "api",
+                    "required": false
+                  },
+                  "context": {
+                    "default": "view",
+                    "required": false
+                  }
+                }
+              }
+            ]
+          },
+          "/api/datasets": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": []
+              }
+            ]
+          }
+        }
+      },
+      "projectIndex": {
+        "status": 200,
+        "error": null,
+        "namespace": "api",
+        "routes": [
+          "/api",
+          "/api/datasets"
+        ]
+      },
+      "datasets": {
+        "status": 200,
+        "error": null,
+        "validEnvelope": true,
+        "city": "Riga",
+        "shape": {
+          "id": "integer",
+          "city": "string",
+          "generatedAt": "string",
+          "proposals": {
+            "type": "array",
+            "count": 0,
+            "itemShapes": []
+          }
+        },
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      },
+      "preflight": {
+        "origin": "https://ct-lup.mintlify.site",
+        "status": 200,
+        "error": null,
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      }
+    },
+    {
+      "pilot": "Rome",
+      "server": "https://rome.bio-intel-mob.eu/wp-json",
+      "discovery": {
+        "status": 200,
+        "error": null,
+        "namespaces": [
+          "oembed/1.0",
+          "wordfence-login-security/v1",
+          "wordfence/v1",
+          "v1",
+          "api",
+          "wp-mail-smtp/setup-wizard/v1",
+          "astra/v1",
+          "nps-survey/v1",
+          "wp/v2",
+          "wp-site-health/v1",
+          "wp-block-editor/v1",
+          "wp-abilities/v1"
+        ],
+        "routes": {
+          "/api": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": {
+                  "namespace": {
+                    "default": "api",
+                    "required": false
+                  },
+                  "context": {
+                    "default": "view",
+                    "required": false
+                  }
+                }
+              }
+            ]
+          },
+          "/api/datasets": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": []
+              }
+            ]
+          }
+        }
+      },
+      "projectIndex": {
+        "status": 200,
+        "error": null,
+        "namespace": "api",
+        "routes": [
+          "/api",
+          "/api/datasets"
+        ]
+      },
+      "datasets": {
+        "status": 200,
+        "error": null,
+        "validEnvelope": true,
+        "city": "Rome",
+        "shape": {
+          "id": "integer",
+          "city": "string",
+          "generatedAt": "string",
+          "proposals": {
+            "type": "array",
+            "count": 8,
+            "itemShapes": [
+              {
+                "category": "string",
+                "date": "string",
+                "description": "string",
+                "id": "integer",
+                "images": {
+                  "count": 0,
+                  "itemShapes": [],
+                  "type": "array"
+                },
+                "latitude": "number",
+                "longitude": "number",
+                "severity": "string",
+                "status": "string",
+                "title": "string",
+                "video": "null",
+                "votes": "integer"
+              },
+              {
+                "category": "string",
+                "date": "string",
+                "description": "string",
+                "id": "integer",
+                "images": {
+                  "count": 1,
+                  "itemShapes": [
+                    "string"
+                  ],
+                  "type": "array"
+                },
+                "latitude": "number",
+                "longitude": "number",
+                "severity": "string",
+                "status": "string",
+                "title": "string",
+                "video": "null",
+                "votes": "integer"
+              }
+            ]
+          }
+        },
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      },
+      "preflight": {
+        "origin": "https://ct-lup.mintlify.site",
+        "status": 200,
+        "error": null,
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      }
+    },
+    {
+      "pilot": "Urla",
+      "server": "https://urla.bio-intel-mob.eu/wp-json",
+      "discovery": {
+        "status": 200,
+        "error": null,
+        "namespaces": [
+          "oembed/1.0",
+          "wordfence-login-security/v1",
+          "wordfence/v1",
+          "v1",
+          "api",
+          "wp-mail-smtp/setup-wizard/v1",
+          "astra/v1",
+          "nps-survey/v1",
+          "wp/v2",
+          "wp-site-health/v1",
+          "wp-block-editor/v1",
+          "wp-abilities/v1"
+        ],
+        "routes": {
+          "/api": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": {
+                  "namespace": {
+                    "default": "api",
+                    "required": false
+                  },
+                  "context": {
+                    "default": "view",
+                    "required": false
+                  }
+                }
+              }
+            ]
+          },
+          "/api/datasets": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": []
+              }
+            ]
+          }
+        }
+      },
+      "projectIndex": {
+        "status": 200,
+        "error": null,
+        "namespace": "api",
+        "routes": [
+          "/api",
+          "/api/datasets"
+        ]
+      },
+      "datasets": {
+        "status": 200,
+        "error": null,
+        "validEnvelope": true,
+        "city": "Urla",
+        "shape": {
+          "id": "integer",
+          "city": "string",
+          "generatedAt": "string",
+          "proposals": {
+            "type": "array",
+            "count": 0,
+            "itemShapes": []
+          }
+        },
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      },
+      "preflight": {
+        "origin": "https://ct-lup.mintlify.site",
+        "status": 200,
+        "error": null,
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      }
+    },
+    {
+      "pilot": "Vilnius",
+      "server": "https://vilnius.bio-intel-mob.eu/wp-json",
+      "discovery": {
+        "status": 200,
+        "error": null,
+        "namespaces": [
+          "oembed/1.0",
+          "wordfence-login-security/v1",
+          "wordfence/v1",
+          "v1",
+          "api",
+          "wp-mail-smtp/setup-wizard/v1",
+          "astra/v1",
+          "nps-survey/v1",
+          "wp/v2",
+          "wp-site-health/v1",
+          "wp-block-editor/v1",
+          "wp-abilities/v1"
+        ],
+        "routes": {
+          "/api": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": {
+                  "namespace": {
+                    "default": "api",
+                    "required": false
+                  },
+                  "context": {
+                    "default": "view",
+                    "required": false
+                  }
+                }
+              }
+            ]
+          },
+          "/api/datasets": {
+            "namespace": "api",
+            "methods": [
+              "GET"
+            ],
+            "endpoints": [
+              {
+                "methods": [
+                  "GET"
+                ],
+                "args": []
+              }
+            ]
+          }
+        }
+      },
+      "projectIndex": {
+        "status": 200,
+        "error": null,
+        "namespace": "api",
+        "routes": [
+          "/api",
+          "/api/datasets"
+        ]
+      },
+      "datasets": {
+        "status": 200,
+        "error": null,
+        "validEnvelope": true,
+        "city": "Vilnius",
+        "shape": {
+          "id": "integer",
+          "city": "string",
+          "generatedAt": "string",
+          "proposals": {
+            "type": "array",
+            "count": 2,
+            "itemShapes": [
+              {
+                "category": "string",
+                "date": "string",
+                "description": "string",
+                "id": "integer",
+                "images": {
+                  "count": 0,
+                  "itemShapes": [],
+                  "type": "array"
+                },
+                "latitude": "number",
+                "longitude": "number",
+                "severity": "string",
+                "status": "string",
+                "title": "string",
+                "video": "null",
+                "votes": "integer"
+              },
+              {
+                "category": "string",
+                "date": "string",
+                "description": "string",
+                "id": "integer",
+                "images": {
+                  "count": 1,
+                  "itemShapes": [
+                    "string"
+                  ],
+                  "type": "array"
+                },
+                "latitude": "number",
+                "longitude": "number",
+                "severity": "string",
+                "status": "string",
+                "title": "string",
+                "video": "null",
+                "votes": "integer"
+              }
+            ]
+          }
+        },
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      },
+      "preflight": {
+        "origin": "https://ct-lup.mintlify.site",
+        "status": 200,
+        "error": null,
+        "cors": {
+          "Access-Control-Allow-Origin": "https://ct-lup.mintlify.site",
+          "Access-Control-Allow-Methods": "OPTIONS, GET, POST, PUT, PATCH, DELETE",
+          "Access-Control-Allow-Credentials": "true"
+        }
+      }
+    }
+  ]
+}

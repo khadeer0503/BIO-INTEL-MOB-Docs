@@ -24,7 +24,7 @@ Open <http://localhost:3000>.
 
 ```powershell
 mint validate
-mint openapi-check openapi/wordpress.yaml
+mint broken-links
 ```
 
 ## Updating documentation
@@ -36,7 +36,27 @@ mint openapi-check openapi/wordpress.yaml
 
 ## API accuracy policy
 
-The initial `openapi/wordpress.yaml` is a draft contract for the user-provided Rome GET endpoint. Verify its schema against the WordPress plugin route registrations and actual response payloads before treating it as authoritative. Add query parameters, writable endpoints, authentication mechanisms, and JSON fields only when the implementation supports them. The API playground uses interactive mode, as configured in `docs.json`.
+The API reference covers all eight BIO-INTEL-MOB pilots, with a shared server selector and dedicated sections per pilot. `openapi/pilots.json` defines the pilot names and URLs. `openapi/wordpress.yaml` defines the shared dataset and REST discovery contract; files in `openapi/pilots/` are generated from it.
+
+Route registrations, response shapes, and documentation-origin CORS behavior were checked on 20 October 2026. The metadata-only snapshot is `api-reference/pilot-api-verification.json`. It records observed behavior, not undocumented backend validation rules. Add parameters, writable endpoints, authentication mechanisms, and fields only when the implementation supports them.
+
+After changing the pilot registry or shared contract:
+
+```powershell
+npm ci
+npm run api:generate
+npm run api:check
+mint validate
+mint broken-links
+```
+
+To refresh the read-only deployment audit:
+
+```powershell
+python scripts/audit-pilot-apis.py --output api-reference/pilot-api-verification.json
+```
+
+The API playground uses interactive mode, as configured in `docs.json`. Each pilot section sends requests to that pilot's server. The shared section provides a server selector and preserves the original dataset reference URL.
 
 ## Publishing and security
 

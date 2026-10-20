@@ -53,10 +53,76 @@
       },
       {
         "tab": "API Reference",
-        "openapi": "openapi/wordpress.yaml",
-        "pages": [
-          "api-reference/overview",
-          "GET /api/datasets"
+        "groups": [
+          {
+            "group": "Start here",
+            "pages": [
+              "api-reference/overview"
+            ]
+          },
+          {
+            "group": "Shared API",
+            "openapi": {
+              "source": "openapi/wordpress.yaml",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Cascais",
+            "openapi": {
+              "source": "openapi/pilots/cascais.yaml",
+              "directory": "api-reference/pilots/cascais"
+            }
+          },
+          {
+            "group": "Kyiv",
+            "openapi": {
+              "source": "openapi/pilots/kyiv.yaml",
+              "directory": "api-reference/pilots/kyiv"
+            }
+          },
+          {
+            "group": "Melsungen",
+            "openapi": {
+              "source": "openapi/pilots/melsungen.yaml",
+              "directory": "api-reference/pilots/melsungen"
+            }
+          },
+          {
+            "group": "Rhodes",
+            "openapi": {
+              "source": "openapi/pilots/rhodes.yaml",
+              "directory": "api-reference/pilots/rhodes"
+            }
+          },
+          {
+            "group": "Riga",
+            "openapi": {
+              "source": "openapi/pilots/riga.yaml",
+              "directory": "api-reference/pilots/riga"
+            }
+          },
+          {
+            "group": "Rome",
+            "openapi": {
+              "source": "openapi/pilots/rome.yaml",
+              "directory": "api-reference/pilots/rome"
+            }
+          },
+          {
+            "group": "Urla",
+            "openapi": {
+              "source": "openapi/pilots/urla.yaml",
+              "directory": "api-reference/pilots/urla"
+            }
+          },
+          {
+            "group": "Vilnius",
+            "openapi": {
+              "source": "openapi/pilots/vilnius.yaml",
+              "directory": "api-reference/pilots/vilnius"
+            }
+          }
         ]
       }
     ]
