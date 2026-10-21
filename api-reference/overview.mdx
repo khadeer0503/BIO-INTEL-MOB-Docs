@@ -1,6 +1,6 @@
 ---
 title: "WordPress API Reference"
-description: "Verified dataset endpoints and REST discovery routes for all eight BIO-INTEL-MOB pilot sites."
+description: "Verified dataset endpoints for all eight BIO-INTEL-MOB pilot sites."
 ---
 
 # WordPress API reference
@@ -29,10 +29,8 @@ Each pilot section includes these public GET operations. Paths are relative to t
 | Method | Path | Purpose |
 | :--- | :--- | :--- |
 | `GET` | `/api/datasets` | Retrieve dataset metadata and civic proposals for the VR application. |
-| `GET` | `/api` | Inspect the registered project routes and their request argument metadata. |
-| `GET` | `/` | Inspect the WordPress REST index and its registered namespaces. |
 
-`GET /api/datasets` is currently the only application data operation registered in the `api` namespace. It requires no authentication and declares no query parameters. The other two operations expose REST discovery metadata. WordPress core, administration, and third-party plugin routes listed in the REST index are outside this application contract.
+`GET /api/datasets` is currently the only application data operation registered in the `api` namespace. It requires no authentication and declares no query parameters. WordPress core, administration, and third-party plugin routes are outside this application contract.
 
 The dataset response contains `id`, `city`, `generatedAt`, and `proposals`. An empty `proposals` array is a successful response. Treat `city` as the string supplied by the backend; its capitalization can vary between pilots. Examples show an illustrative empty dataset, while the schema describes the proposal fields returned when records are available.
 
@@ -69,6 +67,8 @@ The public route index does not expose the WordPress plugin's source code or eve
 ## Maintaining the API reference
 
 `openapi/pilots.json` contains the pilot names and server URLs. `openapi/wordpress.yaml` defines the shared operations and response models. Files in `openapi/pilots/` are generated as self-contained specifications because Mintlify does not support external OpenAPI references.
+
+Discovery documentation is disabled for the shared reference and all pilots using `x-excluded: true` on `GET /` and `GET /api` in `openapi/wordpress.yaml`. To restore it later, remove those two flags and run `npm run api:generate`.
 
 1. Check deployed route registrations and responses before adding an operation. Inspect the plugin source when changing authentication, validation, or write behavior.
 2. Update the pilot registry or shared contract. If a pilot's contract differs, model the difference explicitly before regenerating its specification.

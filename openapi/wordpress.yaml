@@ -70,6 +70,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/RestIndex"
+      x-excluded: true
   /api:
     get:
       tags:
@@ -87,6 +88,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NamespaceIndex"
+      x-excluded: true
 components:
   schemas:
     DatasetResponse:

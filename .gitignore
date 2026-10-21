@@ -8,6 +8,7 @@ Thumbs.db
 
 
 # Keep the API documentation build tools with their generated specifications.
+# They support future API documentation updates:
 !/package.json
 !/package-lock.json
 !/scripts/

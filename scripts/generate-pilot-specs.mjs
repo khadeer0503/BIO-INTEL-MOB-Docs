@@ -40,7 +40,7 @@ write('openapi/wordpress.yaml', YAML.stringify(shared));
 for (const pilot of pilots) {
   const spec = structuredClone(shared);
   spec.info.title = `BIO-INTEL-MOB: ${pilot.name} API`;
-  spec.info.description = `Public dataset and REST discovery endpoints for the ${pilot.name} pilot. ` +
+  spec.info.description = `Public dataset endpoints for the ${pilot.name} pilot. ` +
     'Generated from the shared BIO-INTEL-MOB contract. See the API overview for verification scope.';
   spec.servers = [{ url: pilot.server, description: `${pilot.name} pilot` }];
   spec.components.schemas.DatasetResponse.properties.city.example = pilot.name;

@@ -3,9 +3,8 @@ openapi: 3.0.3
 info:
   title: "BIO-INTEL-MOB: Cascais API"
   version: 0.2.0
-  description: Public dataset and REST discovery endpoints for the Cascais pilot.
-    Generated from the shared BIO-INTEL-MOB contract. See the API overview for
-    verification scope.
+  description: Public dataset endpoints for the Cascais pilot. Generated from the
+    shared BIO-INTEL-MOB contract. See the API overview for verification scope.
 servers:
   - url: https://cascais.bio-intel-mob.eu/wp-json
     description: Cascais pilot
@@ -54,6 +53,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/RestIndex"
+      x-excluded: true
   /api:
     get:
       tags:
@@ -71,6 +71,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NamespaceIndex"
+      x-excluded: true
 components:
   schemas:
     DatasetResponse:
